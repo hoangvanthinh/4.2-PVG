@@ -1,0 +1,43 @@
+
+4.2-M
+
+@ Modbus TCP/IP Client, ETH_PORT_1
+@ Modbus RTU Slave, UART_1
+@ Log data by FT232-USB, UART_2
+# Note add: big_int_helper.S
+@ Note:  i2c_master.c/line400://stateHandlerFunction *const fsmStateTable[]
+@ Core: 4.75
+* Note: Config: [default] Pack 1.2.58 ====> Fix l?i Error 255
+
+//             Vin.val32 = *P42.I1; 
+//             VA.val16[0] = Vin.val16[1];
+//             VA.val16[1] = Vin.val16[0];
+//             x = *(float*)&VA.val;
+//             printf("SES: %lf\r\n",x);
+
+* Update Hardware "Gateway 0.02.20200810"
+* 03/12/2020: 
+ - Update Setup Gateway Primary
+ - Update Setup @4.2Frame_Setup_1.5
+//==========================07122020============================================
+* Fix MODBUS_CLIENT_TELEGRAM Client_telegram[50];  [Meters x 3 x 2]
+Meters = 10 => MODBUS_CLIENT_TELEGRAM Client_telegram[60];
+// SEOJIN- 26/12/2020
+UPDATE TIME OUT TCPIP
+//========================= 18012020 ===========================================
+*ver 3.532: RAM upgrade for 50MM
+//========================= Ver 3.54_Setup =====================================
++> Update: Type Device GATEWAY
++> Update: FW version
++> Update: PORT Server Local
+//========================== ver 4.2-LG ========================================
++> github server
++> Branch Test
++> master test
++> Test up 1
++> Master up 1,2,3.4.5
++> Test1 .1
++> Test1 Branch .1
++> Master .1
+//========================== PVG ===============================================
++> 1st

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://www.netbeans.org/ns/project/1">
+    <type>com.microchip.mplab.nbide.embedded.makeproject</type>
+    <configuration>
+        <data xmlns="http://www.netbeans.org/ns/make-project/1">
+            <name>4.2-PVG</name>
+            <name>4.2-LG</name>
+            <name>4.2G_3.54_Setup</name>
+            <name>4.2G_3.533_SID</name>
+            <name>4.2G_3.532_RAM_up</name>
+            <name>4.2G_3.532_RAM_up</name>
+            <name>4.2G_3.532_DataUpgrade</name>
+            <name>4.2G_3.532_DataUgrate</name>
+            <name>4.2G_3.531_SEOJIN_WF</name>
+            <creation-uuid>457bdb6d-3a8b-4e78-88b5-ceb9071e7398</creation-uuid>
+            <make-project-type>0</make-project-type>
+            <c-extensions>c</c-extensions>
+            <cpp-extensions/>
+            <header-extensions>h</header-extensions>
+            <asminc-extensions/>
+            <sourceEncoding>ISO-8859-1</sourceEncoding>
+            <make-dep-projects/>
+            <sourceRootList>
+                <sourceRootElem>.</sourceRootElem>
+            </sourceRootList>
+            <confList>
+                <confElem>
+                    <name>default</name>
+                    <type>2</type>
+                </confElem>
+            </confList>
+            <formatting>
+                <project-formatting-style>false</project-formatting-style>
+            </formatting>
+        </data>
+    </configuration>
+</project>
