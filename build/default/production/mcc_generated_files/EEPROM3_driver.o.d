@@ -57,7 +57,10 @@ build/default/production/mcc_generated_files/EEPROM3_driver.o: \
  mcc_generated_files/../Modbus/ModbusRTU.h \
  mcc_generated_files/../mcc_generated_files/EEPROM3_example.h \
  mcc_generated_files/../mcc_generated_files/EEPROM3_driver.h \
- mcc_generated_files/../User.h mcc_generated_files/../SES.h
+ mcc_generated_files/../User.h mcc_generated_files/../SES.h \
+ mcc_generated_files/../PV/PV.h \
+ mcc_generated_files/../PV/Inverter/0_Inverter.h \
+ mcc_generated_files/../PV/Weather/Weather.h
 
 mcc_generated_files/../SES.h:
 
@@ -178,3 +181,9 @@ mcc_generated_files/../mcc_generated_files/EEPROM3_driver.h:
 mcc_generated_files/../User.h:
 
 mcc_generated_files/../SES.h:
+
+mcc_generated_files/../PV/PV.h:
+
+mcc_generated_files/../PV/Inverter/0_Inverter.h:
+
+mcc_generated_files/../PV/Weather/Weather.h:

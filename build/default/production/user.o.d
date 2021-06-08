@@ -36,7 +36,8 @@ build/default/production/user.o: user.c SES.h mcc_generated_files/mcc.h \
  Modbus/Modbus.h Modbus/ModbusTCPIP.h Modbus/ModbusTCPIP_Client.h \
  Modbus/ModbusTCPIP.h Modbus/ModbusRTU_Slave.h Modbus/ModbusRTU.h \
  mcc_generated_files/EEPROM3_example.h \
- mcc_generated_files/EEPROM3_driver.h User.h
+ mcc_generated_files/EEPROM3_driver.h User.h PV/PV.h \
+ PV/Inverter/0_Inverter.h PV/Weather/Weather.h
 
 SES.h:
 
@@ -155,3 +156,9 @@ mcc_generated_files/EEPROM3_example.h:
 mcc_generated_files/EEPROM3_driver.h:
 
 User.h:
+
+PV/PV.h:
+
+PV/Inverter/0_Inverter.h:
+
+PV/Weather/Weather.h:

@@ -97,6 +97,7 @@
       <itemPath>SES.h</itemPath>
       <itemPath>Sstype.h</itemPath>
       <itemPath>User.h</itemPath>
+      <itemPath>PV/PV.h</itemPath>
     </logicalFolder>
     <logicalFolder name="LinkerScript"
                    displayName="Linker Files"
@@ -131,6 +132,24 @@
       <logicalFolder name="Modbus" displayName="Modbus" projectFiles="true">
         <itemPath>Modbus/ModbusTCPClient.c</itemPath>
         <itemPath>Modbus/ModbusRTU_Slave.c</itemPath>
+      </logicalFolder>
+      <logicalFolder name="PV" displayName="PV" projectFiles="true">
+        <logicalFolder name="Inverter" displayName="Inverter" projectFiles="true">
+          <itemPath>PV/Inverter/0_Inverter.c</itemPath>
+          <itemPath>PV/Inverter/0_Inverter.h</itemPath>
+          <itemPath>PV/Inverter/1_SunGrow.c</itemPath>
+          <itemPath>PV/Inverter/1_SunGrow.h</itemPath>
+        </logicalFolder>
+        <logicalFolder name="Strings" displayName="Panels" projectFiles="true">
+        </logicalFolder>
+        <logicalFolder name="CombinerBox"
+                       displayName="Str_Combiner"
+                       projectFiles="true">
+        </logicalFolder>
+        <logicalFolder name="Weather" displayName="Weather" projectFiles="true">
+          <itemPath>PV/Weather/Weather.c</itemPath>
+          <itemPath>PV/Weather/Weather.h</itemPath>
+        </logicalFolder>
       </logicalFolder>
       <logicalFolder name="tcpip" displayName="tcpip" projectFiles="true">
         <logicalFolder name="src" displayName="src" projectFiles="true">

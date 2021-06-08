@@ -52,7 +52,8 @@ build/default/production/Modbus/ModbusRTU_Slave.o: \
  Modbus/../Modbus/ModbusRTU.h \
  Modbus/../mcc_generated_files/EEPROM3_example.h \
  Modbus/../mcc_generated_files/EEPROM3_driver.h Modbus/../User.h \
- Modbus/../SES.h
+ Modbus/../SES.h Modbus/../PV/PV.h Modbus/../PV/Inverter/0_Inverter.h \
+ Modbus/../PV/Weather/Weather.h
 
 Modbus/../SES.h:
 
@@ -173,3 +174,9 @@ Modbus/../mcc_generated_files/EEPROM3_driver.h:
 Modbus/../User.h:
 
 Modbus/../SES.h:
+
+Modbus/../PV/PV.h:
+
+Modbus/../PV/Inverter/0_Inverter.h:
+
+Modbus/../PV/Weather/Weather.h:
