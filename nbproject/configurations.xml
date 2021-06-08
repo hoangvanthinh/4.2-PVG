@@ -211,7 +211,7 @@
         <targetPluginBoard></targetPluginBoard>
         <platformTool>pk4hybrid</platformTool>
         <languageToolchain>XC16</languageToolchain>
-        <languageToolchainVersion>1.41</languageToolchainVersion>
+        <languageToolchainVersion>1.61</languageToolchainVersion>
         <platform>3</platform>
       </toolsSet>
       <packs>
