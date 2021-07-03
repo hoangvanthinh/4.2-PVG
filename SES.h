@@ -52,11 +52,14 @@
 #include "Modbus/ModbusTCPIP_Client.h"
 //#include "Modbus/ModbusTCPIP_Server.h"
 #include "Modbus/ModbusRTU_Slave.h"
-//#include "Modbus/ModbusRTU_Master.h"
+#include "Modbus/ModbusRTU_Master.h"
+
 #include "mcc_generated_files/EEPROM3_example.h"
 #include "mcc_generated_files/EEPROM3_driver.h"
 #include "User.h"
 #include "PV/PV.h"
+
+
 
 
 
