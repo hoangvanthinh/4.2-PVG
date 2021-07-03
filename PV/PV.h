@@ -34,7 +34,10 @@
 #include <xc.h> // include processor files - each processor file is guarded.  
 
 #include "Inverter/0_Inverter.h"
+#include "Panels/0_panels.h"
+#include "Str_combiner/0_str_combiner.h"
 #include "Weather/Weather.h"
+
 
 
 // TODO Insert appropriate #include <>
@@ -42,8 +45,21 @@
 // TODO Insert C++ class definitions if appropriate
 
 // TODO Insert declarations
-
+enum DEVICE_TYPE
+{
+    INVERTER = 0,
+    PANEL,
+    STR_COMBINER,
+    CONTROL_IO,
+    WEATHER_STATION
+};
+extern __eds__ __attribute ((eds))uint16_t RTU_Buffer[MAX_DEVICE][350];
+extern __eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE][350];
 // Comment a function and leverage automatic documentation with slash star star
+void Device_RTU_Init(void);
+void Device_TCP_Init(void);
+void Device_RTU_GetData(uint8_t index);
+void Device_TCP_GetData(uint8_t index);
 /**
     <p><b>Function prototype:</b></p>
   
