@@ -61,9 +61,10 @@ int main(void)
     tM1 = TickGet();
     
     Read_G42_Setup();
-    
+
     Information_Device();
     SES_ModbusTCP_Client_Init();
+    SES_ModbusRTU_Master_Init();
     SES_ModbusRTU_Slave_start(); 
 
     // SIM
@@ -84,10 +85,13 @@ int main(void)
         if(TickGet() - t >= TICK_SECOND) 
         {
              t = TickGet() ; 
-             RD_RED_Toggle();               
-        } 
+             RD_RED_Toggle();
+        }
+     
+        SES_ModbusRTU_Master_Process();
         SES_ModbusTCPIP_Client_Process();
         SES_ModbusRTU_Slave_Process();
+        
 
     }
     return 1; 
