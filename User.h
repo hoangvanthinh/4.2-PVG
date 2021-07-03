@@ -37,6 +37,31 @@
 #define ADD_BEGIN_ID_TEMPERATURE (ADD_START_SETUP + 100)
 #define VAL_STATUS_EEPROM_YET   111
 
+#define MAX_DEVICE 17
+
+#define MAX_CONTROL_IO 1
+#define MAX_INVERTER 5
+#define MAX_STRCOMBINER 5
+#define MAX_PANEL 5
+
+#define MAX_INVERTER_TCP 5
+#define MAX_STRCOMBINER_TCP 5
+#define MAX_PANEL_TCP 5
+#define MAX_WEATHER_TCP 1
+#define MAX_CONTROL_IO_TCP 1
+
+#define MAX_INVERTER_RS485 5
+#define MAX_STRCOMBINER_RS485 5
+#define MAX_PANEL_RS485 5
+#define MAX_CONTROL_IO_RS485 1
+
+#define MAX_FRAME 5
+
+enum MODBUS_TYPE
+{
+    MODBUS_RTU = 0,
+    MODBUS_TCP
+};
 
 union data{
     int8_t val[2];
@@ -76,6 +101,34 @@ typedef struct
     UINT8 Status;
     
 }_INTERFACE;
+
+typedef struct
+{
+    uint8_t UID;
+    uint16_t SID;
+    uint8_t Dev_type;
+    uint8_t Series;
+    uint8_t Func;
+    uint8_t NumFr;
+    FRAME Fr[MAX_FRAME];
+    uint8_t EN;
+    
+}DEVICE_INFOR;
+
+typedef struct
+{
+    DEVICE_INFOR Dev_Setup;
+    UINT8 Status;
+}_DEVICE_RTU;
+
+typedef struct
+{
+    UINT8 IP[4];
+    DEVICE_INFOR Dev_Setup;
+    UINT8 Status;
+}_DEVICE_TCP;
+
+
 typedef struct
 {
     UINT8 IP[4];
@@ -101,10 +154,22 @@ typedef struct
     
     SERVER_LOCAL LOCAL_SERVER;
     SERVER_CLOUD CLOUD_SERVER;
-
-    UINT8 Num_Interface;    
-    _INTERFACE Interface[50];
-    METER Meter[50]; 
+    
+    UINT8 Num_inverter_rtu;
+    UINT8 Num_inverter_tcp;
+    UINT8 Num_panel_rtu;
+    UINT8 Num_panel_tcp;
+    UINT8 Num_str_combiner_rtu;
+    UINT8 Num_str_combiner_tcp;
+    UINT8 Num_control_io_rtu;
+    UINT8 Num_control_io_tcp;
+    UINT8 Num_weather;
+    
+    UINT8 Num_Dev_rtu;
+    UINT8 Num_Dev_tcp;
+    
+    _DEVICE_TCP Dev_tcp[MAX_DEVICE];
+    _DEVICE_RTU Dev_rtu[MAX_DEVICE];
             
 }Gateway_setup;
 
@@ -118,6 +183,7 @@ void Modbus_RTU_Slave_Add_Setup(void);
 void Check_Save_DataSetup(void);
 void Write_WEEROM42(void);
 void Information_Device(void);
+uint32_t convert16to32(uint16_t h, uint16_t l);
 
 //void READ_MY_IP(void);
 //void WRITE_MY_IP(uint32_t address,void* data, uint16_t count);
