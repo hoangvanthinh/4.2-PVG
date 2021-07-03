@@ -35,7 +35,7 @@ typedef struct
     FRAME Frame; 
     UINT8 IID;
     
-}_INFORMATION_INTERFACE;
+}_INFORMATION_DEVICE;
 
 typedef struct
 {
@@ -47,7 +47,7 @@ typedef struct
 //    __eds__ int *__eds__ *au16reg __attribute__((space(psv)));
    __eds__ uint16_t *au16reg;     /*!< Pointer to memory image in master */
     
-    _INFORMATION_INTERFACE INFOR;
+    _INFORMATION_DEVICE INFOR;
 }  MODBUS_CLIENT_TELEGRAM;
 //extern Client_modbus_FR Client_telegram[4];
 
@@ -84,11 +84,11 @@ MODBUS_CLIENT_STATE;
 #define HOLDINGREG_SIZE 125
 #define Client_Modbus_Scanrate  100
 //#define MAX_BUFF 100
-#define NUM_FRAME_METER 3
-#define MAX_NUM_METER 50//30
+//#define NUM_FRAME_WEATHER 1 
+//#define MAX_NUM_WEATHER_STATION 10//30
 /** P R O T O T Y P E S ***********************************************************/
-extern UINT16 Sum_numof_Meter, Sum_Num_Frame;
-extern __eds__ __attribute ((eds))uint16_t   Data42L_Meter [MAX_NUM_METER][350];
+//extern UINT16 Sum_numof_Meter, Sum_Num_Frame;
+//extern __eds__ __attribute ((eds))uint16_t   Data42L_Meter [MAX_NUM_METER][350];
 
 void SES_ModbusTCP_Client_Init(void);
 void SES_ModbusTCPIP_Client_Process(void);
