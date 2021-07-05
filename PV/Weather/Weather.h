@@ -33,6 +33,8 @@
 
 #include <xc.h> // include processor files - each processor file is guarded.  
 
+#define NUM_FRAME_WEATHER 1 
+#define MAX_NUM_WEATHER_STATION 1//30
 
 typedef struct
 {
@@ -44,6 +46,12 @@ typedef struct
     UINT16 ATMOSPHERIC;
     UINT16 RAIN;
 } WEATHER_DATA;
+
+extern __eds__ __attribute ((eds))WEATHER_DATA Weather[MAX_WEATHER_TCP];
+
+void Weather_station_Init(DEVICE_INFOR *Weather_Setup);
+void Weather_TCP_GetData(uint8_t index);
+//void Getdata_Weather(uint8_t index);
 // TODO Insert appropriate #include <>
 
 // TODO Insert C++ class definitions if appropriate

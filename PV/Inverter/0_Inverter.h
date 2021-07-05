@@ -31,8 +31,9 @@
 #ifndef XC_HEADER_INVERTER_H
 #define	XC_HEADER_INVERTER_H
 
-#include <xc.h> // include processor files - each processor file is guarded.  
-
+#include <xc.h> // include processor files - each processor file is guarded. 
+#include "../../SES.h"
+#include "1_SunGrow.h"
 // TODO Insert appropriate #include <>
 
 // TODO Insert C++ class definitions if appropriate
@@ -63,6 +64,13 @@
  */
 // TODO Insert declarations or function prototypes (right here) to leverage 
 // live documentation
+
+
+enum INVERTER_NAME
+{
+    SG110CX = 0
+};
+
 enum INVETER_OPERATING_STATE
 {
     OFF = 1,
@@ -73,7 +81,7 @@ enum INVETER_OPERATING_STATE
     SHUTTING_DOWN,
     FAULT,
     STANDBY
-  
+            
 };
 enum INVERTER_EVENT
 {
@@ -104,23 +112,32 @@ typedef struct
     UINT16 AN;
     UINT16 BN;
     UINT16 CN;
+    INT16 V_SF;
     
     UINT16 IA;
     UINT16 IB;
     UINT16 IC;
+    INT16 A_SF;
     
     
     INT16 PF;
+    INT16 PF_SF;
+    
     INT16  P,Q,S;
+    INT16 W_SF,VAr_SF,VA_SF;
+    
     UINT16 F;
+    INT16 Hz_SF;
+    
     UINT64 EP, EQ, ES;
-      
+    
 }AC_Electric;
 
 
 typedef struct
 {
     UINT16 I_DC, U_DC, P_DC;
+    INT16 DCA_SF,DCV_SF,DCW_SF;
 }DC_Electric;
 
 
@@ -130,6 +147,7 @@ typedef struct
     INT16 T_Cabinet;
     INT16 T_Heat_Sink;
     INT16 T_Tranformer;
+    INT16 Tmp_SF;
 }TEMPERATURE_INVERTER;
 
 
@@ -140,11 +158,15 @@ typedef struct
     AC_Electric AC;
     DC_Electric DC;
     TEMPERATURE_INVERTER T;
-
 }INVERTER_DATA;
 
+extern __eds__ __attribute ((eds))INVERTER_DATA InvData_RTU[MAX_INVERTER_RS485];
+extern __eds__ __attribute ((eds))INVERTER_DATA InvData_TCP[MAX_INVERTER_TCP];
 
-
+void Inverter_RTU_Init(uint8_t index);
+void Inverter_TCP_Init(uint8_t index);
+void Inverter_RTU_GetData(uint8_t index);
+//void GetData_From_Inverter_TCP(void);
 #ifdef	__cplusplus
 extern "C" {
 #endif /* __cplusplus */

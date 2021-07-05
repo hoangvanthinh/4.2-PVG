@@ -63,7 +63,6 @@ enum ERR_LIST
     ERR_EXCEPTION                 = -5
 };
 
-
 #define  MAX_BUFFER  270	//!< maximum size for the communication buffer in bytes
 
 //===========================MODBUS=============================================

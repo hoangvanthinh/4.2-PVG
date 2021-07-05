@@ -32,18 +32,18 @@ build/default/production/Framework/tcpip/src/common/tick.o: \
  Framework/tcpip/src/common/../../../../mcc_generated_files/pin_manager.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/reset.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/reset_types.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/tmr2.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/uart1.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/watchdog.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/uart2.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_simple_master.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/../drivers/i2c_types.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/i2c2_driver.h \
+ Framework/tcpip/src/common/../../../../mcc_generated_files/spi1.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/interrupt_manager.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/traps.h \
+ Framework/tcpip/src/common/../../../../mcc_generated_files/tmr2.h \
+ Framework/tcpip/src/common/../../../../mcc_generated_files/watchdog.h \
+ Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_simple_master.h \
+ Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/../drivers/i2c_types.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_master.h \
  Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_types.h \
- Framework/tcpip/src/common/../../../../mcc_generated_files/spi1.h
+ Framework/tcpip/src/common/../../../../mcc_generated_files/uart2.h \
+ Framework/tcpip/src/common/../../../../mcc_generated_files/uart1.h
 
 Framework/tcpip/src/common/../../tcpip.h:
 
@@ -109,26 +109,26 @@ Framework/tcpip/src/common/../../../../mcc_generated_files/reset.h:
 
 Framework/tcpip/src/common/../../../../mcc_generated_files/reset_types.h:
 
-Framework/tcpip/src/common/../../../../mcc_generated_files/tmr2.h:
-
-Framework/tcpip/src/common/../../../../mcc_generated_files/uart1.h:
-
-Framework/tcpip/src/common/../../../../mcc_generated_files/watchdog.h:
-
-Framework/tcpip/src/common/../../../../mcc_generated_files/uart2.h:
-
-Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_simple_master.h:
-
-Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/../drivers/i2c_types.h:
-
 Framework/tcpip/src/common/../../../../mcc_generated_files/i2c2_driver.h:
+
+Framework/tcpip/src/common/../../../../mcc_generated_files/spi1.h:
 
 Framework/tcpip/src/common/../../../../mcc_generated_files/interrupt_manager.h:
 
 Framework/tcpip/src/common/../../../../mcc_generated_files/traps.h:
 
+Framework/tcpip/src/common/../../../../mcc_generated_files/tmr2.h:
+
+Framework/tcpip/src/common/../../../../mcc_generated_files/watchdog.h:
+
+Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_simple_master.h:
+
+Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/../drivers/i2c_types.h:
+
 Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_master.h:
 
 Framework/tcpip/src/common/../../../../mcc_generated_files/drivers/i2c_types.h:
 
-Framework/tcpip/src/common/../../../../mcc_generated_files/spi1.h:
+Framework/tcpip/src/common/../../../../mcc_generated_files/uart2.h:
+
+Framework/tcpip/src/common/../../../../mcc_generated_files/uart1.h:

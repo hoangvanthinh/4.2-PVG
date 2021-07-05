@@ -14,7 +14,7 @@
     This source file provides APIs for driver for UART2. 
     Generation Information : 
         Product Revision  :  PIC24 / dsPIC33 / PIC32MM MCUs - 1.168.0
-        Device            :  dsPIC33EP256MU810
+        Device            :  dsPIC33EP512MU810
     The generated drivers are tested against the following:
         Compiler          :  XC16 v1.50
         MPLAB             :  MPLAB X v5.40
@@ -80,8 +80,8 @@ static bool volatile rxOverflowed;
  * when head == tail.  So full will result in head/tail being off by one due to
  * the extra byte.
  */
-#define UART2_CONFIG_TX_BYTEQ_LENGTH (265+1)
-#define UART2_CONFIG_RX_BYTEQ_LENGTH (265+1)
+#define UART2_CONFIG_TX_BYTEQ_LENGTH (250+1)
+#define UART2_CONFIG_RX_BYTEQ_LENGTH (250+1)
 
 /** UART Driver Queue
 
@@ -342,7 +342,6 @@ int __attribute__((__section__(".libc.write"))) write(int handle, void *buffer, 
 
 *******************************************************************************/
 
-//static 
 uint8_t UART2_RxDataAvailable(void)
 {
     uint16_t size;

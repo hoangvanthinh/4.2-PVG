@@ -67,7 +67,7 @@ void PIN_MANAGER_Initialize (void)
     LATD = 0x0000;
     LATE = 0x00E1;
     LATF = 0x0000;
-    LATG = 0x0000;
+    LATG = 0x0002;
 
     /****************************************************************************
      * Setting the GPIO Direction SFR(s)
@@ -78,7 +78,7 @@ void PIN_MANAGER_Initialize (void)
     TRISD = 0xCFF7;
     TRISE = 0x011E;
     TRISF = 0x213F;
-    TRISG = 0xF3C3;
+    TRISG = 0xF3C0;
 
     /****************************************************************************
      * Setting the Weak Pull Up and Weak Pull Down SFR(s)
@@ -109,8 +109,8 @@ void PIN_MANAGER_Initialize (void)
     /****************************************************************************
      * Setting the Analog/Digital Configuration SFR(s)
      ***************************************************************************/
-    ANSELA = 0x0640;
-    ANSELB = 0xEF1F;
+    ANSELA = 0x0600;
+    ANSELB = 0xEFDC;
     ANSELC = 0x6010;
     ANSELD = 0x00C0;
     ANSELE = 0x001E;
@@ -121,13 +121,15 @@ void PIN_MANAGER_Initialize (void)
      ***************************************************************************/
     __builtin_write_OSCCONL(OSCCON & 0xbf); // unlock PPS
 
-    RPINR19bits.U2RXR = 0x0017;    //RA7->UART2:U2RX
-    RPOR11bits.RP108R = 0x0007;    //RF12->SPI1:SS1
-    RPOR1bits.RP66R = 0x0006;    //RD2->SPI1:SCK1
-    RPOR4bits.RP80R = 0x0003;    //RE0->UART2:U2TX
-    RPINR20bits.SDI1R = 0x0058;    //RE8->SPI1:SDI1
-    RPOR1bits.RP67R = 0x0005;    //RD3->SPI1:SDO1
     RPINR20bits.SCK1R = 0x0042;    //RD2->SPI1:SCK1
+    RPOR1bits.RP67R = 0x0005;    //RD3->SPI1:SDO1
+    RPOR4bits.RP80R = 0x0003;    //RE0->UART2:U2TX
+    RPOR1bits.RP66R = 0x0006;    //RD2->SPI1:SCK1
+    RPOR13bits.RP113R = 0x0001;    //RG1->UART1:U1TX
+    RPINR20bits.SDI1R = 0x0058;    //RE8->SPI1:SDI1
+    RPOR11bits.RP108R = 0x0007;    //RF12->SPI1:SS1
+    RPINR18bits.U1RXR = 0x0016;    //RA6->UART1:U1RX
+    RPINR19bits.U2RXR = 0x0017;    //RA7->UART2:U2RX
 
     __builtin_write_OSCCONL(OSCCON | 0x40); // lock PPS
 }

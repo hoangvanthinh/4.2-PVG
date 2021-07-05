@@ -55,7 +55,7 @@
 
 // FOSC
 #pragma config POSCMD = NONE    //Primary Oscillator Mode Select bits->Primary Oscillator disabled
-#pragma config OSCIOFNC = OFF    //OSC2 Pin Function bit->OSC2 is clock output
+#pragma config OSCIOFNC = ON    //OSC2 Pin Function bit->OSC2 is general purpose digital I/O pin
 #pragma config IOL1WAY = ON    //Peripheral pin select configuration->Allow only one reconfiguration
 #pragma config FCKSM = CSECMD    //Clock Switching Mode bits->Clock switching is enabled,Fail-safe Clock Monitor is disabled
 
@@ -73,7 +73,7 @@
 #pragma config ALTI2C2 = ON    //Alternate I2C pins for I2C2->ASDA2/ASCK2 pins are selected as the I/O pins for I2C2
 
 // FICD
-#pragma config ICS = PGD1    //ICD Communication Channel Select bits->Communicate on PGEC1 and PGED1
+#pragma config ICS = PGD3    //ICD Communication Channel Select bits->Communicate on PGEC3 and PGED3
 #pragma config RSTPRI = PF    //Reset Target Vector Select bit->Device will obtain reset instruction from Primary flash
 #pragma config JTAGEN = OFF    //JTAG Enable bit->JTAG is disabled
 
@@ -86,29 +86,27 @@
 #include "clock.h"
 #include "system.h"
 #include "system_types.h"
-#include "tmr2.h"
-#include "uart1.h"
-#include "uart2.h"
-#include "drivers/i2c_simple_master.h"
 #include "i2c2_driver.h"
+#include "spi1.h"
 #include "interrupt_manager.h"
 #include "traps.h"
+#include "tmr2.h"
+#include "drivers/i2c_simple_master.h"
 #include "drivers/i2c_master.h"
-#include "spi1.h"
+#include "uart2.h"
+#include "uart1.h"
 
 void SYSTEM_Initialize(void)
 {
     PIN_MANAGER_Initialize();
-    CLOCK_Initialize();
     INTERRUPT_Initialize();
+    CLOCK_Initialize();
     UART2_Initialize();
     SPI1_Initialize();
     UART1_Initialize();
     TMR2_Initialize();
     INTERRUPT_GlobalEnable();
     SYSTEM_CORCONModeOperatingSet(CORCON_MODE_PORVALUES);
-    
-//    DSRPAG = 0x0300;
 }
 
 /**

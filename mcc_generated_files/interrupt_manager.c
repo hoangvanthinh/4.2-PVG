@@ -61,6 +61,15 @@ void INTERRUPT_Initialize (void)
     //    URXI: UART2 Receiver
     //    Priority: 1
         IPC7bits.U2RXIP = 1;
+    //    UERI: UART1 Error
+    //    Priority: 1
+        IPC16bits.U1EIP = 1;
+    //    UTXI: UART1 Transmitter
+    //    Priority: 1
+        IPC3bits.U1TXIP = 1;
+    //    URXI: UART1 Receiver
+    //    Priority: 1
+        IPC2bits.U1RXIP = 1;
     //    MICI: I2C2 Master Events
     //    Priority: 1
         IPC12bits.MI2C2IP = 1;

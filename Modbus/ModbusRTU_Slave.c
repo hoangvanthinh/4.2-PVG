@@ -806,48 +806,48 @@ static int8_t process_FC16( uint16_t *regs, uint8_t u8size )
 void SES_ModbusRTU_Slave_Process(void)
 {
     
-        static int8_t state = 0,i;
-        state = SES_ModbusRTU_Slave_poll( SES_42.SETUP_REGS, 500 );
-        
-        SES_42.SETUP_REGS[70] = Sum_numof_Meter;
-        //UPDATE STATUS METER
-//        for(i = 0; i < 15; i++)
-//            Data42L_Meter[i][90] = 1;
-        *Status_Meter = 0; 
-        for(i = 0; i < Sum_numof_Meter; i++)
-        {
-            if(Data42L_Meter[i][90] > 0)
-            {
-                *Status_Meter |= ((UINT64)1 << i);
-            }
-            else
-            {
-                *Status_Meter &= ~((UINT64)1 << i);
-            }
-        }
-//        *Status_Meter |= (UINT64)1 << 25;
-//        *Status_Meter = 0x00FFFFFF;
-        
-        //UPDATE STATUS INTERFACE
-        for(i = 0; i < G42.Num_Interface; i++)
-        {
-            if(G42.Interface[i].Status)
-            {
-                SES_42.Coils.val |= (UINT64)1 << (i+1);
-            }
-            else
-            {
-                SES_42.Coils.val &= ~((UINT64)1 << (i+1));
-            }
-        }
-        if(G42.LOCAL_SERVER.Status)
-        {
-            SES_42.Coils.val |= (UINT64)1 << 51;
-        }
-        else
-        {
-            SES_42.Coils.val &= ~((UINT64)1 << 51);
-        }
-        Check_Save_DataSetup();
+//        static int8_t state = 0,i;
+//        state = SES_ModbusRTU_Slave_poll( SES_42.SETUP_REGS, 500 );
+//        
+//        SES_42.SETUP_REGS[70] = Sum_numof_Meter;
+//        //UPDATE STATUS METER
+////        for(i = 0; i < 15; i++)
+////            Data42L_Meter[i][90] = 1;
+//        *Status_Meter = 0; 
+//        for(i = 0; i < Sum_numof_Meter; i++)
+//        {
+//            if(Data42L_Meter[i][90] > 0)
+//            {
+//                *Status_Meter |= ((UINT64)1 << i);
+//            }
+//            else
+//            {
+//                *Status_Meter &= ~((UINT64)1 << i);
+//            }
+//        }
+////        *Status_Meter |= (UINT64)1 << 25;
+////        *Status_Meter = 0x00FFFFFF;
+//        
+//        //UPDATE STATUS INTERFACE
+//        for(i = 0; i < G42.Num_Interface; i++)
+//        {
+//            if(G42.Interface[i].Status)
+//            {
+//                SES_42.Coils.val |= (UINT64)1 << (i+1);
+//            }
+//            else
+//            {
+//                SES_42.Coils.val &= ~((UINT64)1 << (i+1));
+//            }
+//        }
+//        if(G42.LOCAL_SERVER.Status)
+//        {
+//            SES_42.Coils.val |= (UINT64)1 << 51;
+//        }
+//        else
+//        {
+//            SES_42.Coils.val &= ~((UINT64)1 << 51);
+//        }
+//        Check_Save_DataSetup();
     
 }

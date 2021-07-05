@@ -2,6 +2,20 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/Framework/sysconf_inc/tcpip_config.h</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/main.c</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/SES.h</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/Framework/tcpip/src/tcp.c</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/PV/Inverter/1_SunGrow.c</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/Modbus/ModbusTCPClient.c</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/user.c</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/User.h</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/PV/PV.c</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/PV/PV.h</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/Framework/tcpip/tcp.h</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/Modbus/ModbusTCPIP_Client.h</file>
+            <file>file:/E:/Embedded/Microchip/PIC-16bit/Projects/4.2-PVG/PV/Weather/Weather.c</file>
+        </group>
     </open-files>
 </project-private>

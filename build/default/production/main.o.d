@@ -2,15 +2,14 @@ build/default/production/main.o: main.c SES.h mcc_generated_files/mcc.h \
  mcc_generated_files/system.h mcc_generated_files/system_types.h \
  mcc_generated_files/clock.h mcc_generated_files/pin_manager.h \
  mcc_generated_files/reset.h mcc_generated_files/reset_types.h \
- mcc_generated_files/tmr2.h mcc_generated_files/uart1.h \
- mcc_generated_files/watchdog.h mcc_generated_files/uart2.h \
+ mcc_generated_files/i2c2_driver.h mcc_generated_files/spi1.h \
+ mcc_generated_files/interrupt_manager.h mcc_generated_files/traps.h \
+ mcc_generated_files/tmr2.h mcc_generated_files/watchdog.h \
  mcc_generated_files/drivers/i2c_simple_master.h \
  mcc_generated_files/drivers/../drivers/i2c_types.h \
- mcc_generated_files/i2c2_driver.h \
- mcc_generated_files/interrupt_manager.h mcc_generated_files/traps.h \
  mcc_generated_files/drivers/i2c_master.h \
- mcc_generated_files/drivers/i2c_types.h mcc_generated_files/spi1.h \
- Framework/tcpip/tcpip.h \
+ mcc_generated_files/drivers/i2c_types.h mcc_generated_files/uart2.h \
+ mcc_generated_files/uart1.h Framework/tcpip/tcpip.h \
  Framework/tcpip/../../Framework/sysconf_inc/system_config.h \
  Framework/tcpip/../../Framework/sysconf_inc/system_inc.h \
  Framework/tcpip/../../Framework/sysconf_inc/tcpip_config.h \
@@ -35,9 +34,12 @@ build/default/production/main.o: main.c SES.h mcc_generated_files/mcc.h \
  Framework/sysconf_inc/tcpip_config.h Sstype.h Modbus/ModbusRTU.h \
  Modbus/Modbus.h Modbus/ModbusTCPIP.h Modbus/ModbusTCPIP_Client.h \
  Modbus/ModbusTCPIP.h Modbus/ModbusRTU_Slave.h Modbus/ModbusRTU.h \
- mcc_generated_files/EEPROM3_example.h \
+ Modbus/ModbusRTU_Master.h mcc_generated_files/EEPROM3_example.h \
  mcc_generated_files/EEPROM3_driver.h User.h PV/PV.h \
- PV/Inverter/0_Inverter.h PV/Weather/Weather.h
+ PV/Inverter/0_Inverter.h PV/Inverter/../../SES.h PV/Inverter/1_SunGrow.h \
+ PV/Inverter/0_Inverter.h PV/Panels/0_panels.h \
+ PV/Str_combiner/0_str_combiner.h PV/Str_combiner/../../SES.h \
+ PV/Weather/Weather.h
 
 SES.h:
 
@@ -55,29 +57,29 @@ mcc_generated_files/reset.h:
 
 mcc_generated_files/reset_types.h:
 
-mcc_generated_files/tmr2.h:
-
-mcc_generated_files/uart1.h:
-
-mcc_generated_files/watchdog.h:
-
-mcc_generated_files/uart2.h:
-
-mcc_generated_files/drivers/i2c_simple_master.h:
-
-mcc_generated_files/drivers/../drivers/i2c_types.h:
-
 mcc_generated_files/i2c2_driver.h:
+
+mcc_generated_files/spi1.h:
 
 mcc_generated_files/interrupt_manager.h:
 
 mcc_generated_files/traps.h:
 
+mcc_generated_files/tmr2.h:
+
+mcc_generated_files/watchdog.h:
+
+mcc_generated_files/drivers/i2c_simple_master.h:
+
+mcc_generated_files/drivers/../drivers/i2c_types.h:
+
 mcc_generated_files/drivers/i2c_master.h:
 
 mcc_generated_files/drivers/i2c_types.h:
 
-mcc_generated_files/spi1.h:
+mcc_generated_files/uart2.h:
+
+mcc_generated_files/uart1.h:
 
 Framework/tcpip/tcpip.h:
 
@@ -151,6 +153,8 @@ Modbus/ModbusRTU_Slave.h:
 
 Modbus/ModbusRTU.h:
 
+Modbus/ModbusRTU_Master.h:
+
 mcc_generated_files/EEPROM3_example.h:
 
 mcc_generated_files/EEPROM3_driver.h:
@@ -160,5 +164,17 @@ User.h:
 PV/PV.h:
 
 PV/Inverter/0_Inverter.h:
+
+PV/Inverter/../../SES.h:
+
+PV/Inverter/1_SunGrow.h:
+
+PV/Inverter/0_Inverter.h:
+
+PV/Panels/0_panels.h:
+
+PV/Str_combiner/0_str_combiner.h:
+
+PV/Str_combiner/../../SES.h:
 
 PV/Weather/Weather.h:

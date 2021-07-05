@@ -202,6 +202,152 @@
 #define ETH_INT_SetDigitalOutput() (_TRISA0 = 0)
 /**
   @Summary
+    Sets the GPIO pin, RA3, high using LATA3.
+
+  @Description
+    Sets the GPIO pin, RA3, high using LATA3.
+
+  @Preconditions
+    The RA3 must be set to an output.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Set RA3 high (1)
+    SDA2_SetHigh();
+    </code>
+
+*/
+#define SDA2_SetHigh()          (_LATA3 = 1)
+/**
+  @Summary
+    Sets the GPIO pin, RA3, low using LATA3.
+
+  @Description
+    Sets the GPIO pin, RA3, low using LATA3.
+
+  @Preconditions
+    The RA3 must be set to an output.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Set RA3 low (0)
+    SDA2_SetLow();
+    </code>
+
+*/
+#define SDA2_SetLow()           (_LATA3 = 0)
+/**
+  @Summary
+    Toggles the GPIO pin, RA3, using LATA3.
+
+  @Description
+    Toggles the GPIO pin, RA3, using LATA3.
+
+  @Preconditions
+    The RA3 must be set to an output.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Toggle RA3
+    SDA2_Toggle();
+    </code>
+
+*/
+#define SDA2_Toggle()           (_LATA3 ^= 1)
+/**
+  @Summary
+    Reads the value of the GPIO pin, RA3.
+
+  @Description
+    Reads the value of the GPIO pin, RA3.
+
+  @Preconditions
+    None.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    uint16_t portValue;
+
+    // Read RA3
+    postValue = SDA2_GetValue();
+    </code>
+
+*/
+#define SDA2_GetValue()         _RA3
+/**
+  @Summary
+    Configures the GPIO pin, RA3, as an input.
+
+  @Description
+    Configures the GPIO pin, RA3, as an input.
+
+  @Preconditions
+    None.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Sets the RA3 as an input
+    SDA2_SetDigitalInput();
+    </code>
+
+*/
+#define SDA2_SetDigitalInput()  (_TRISA3 = 1)
+/**
+  @Summary
+    Configures the GPIO pin, RA3, as an output.
+
+  @Description
+    Configures the GPIO pin, RA3, as an output.
+
+  @Preconditions
+    None.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Sets the RA3 as an output
+    SDA2_SetDigitalOutput();
+    </code>
+
+*/
+#define SDA2_SetDigitalOutput() (_TRISA3 = 0)
+/**
+  @Summary
     Sets the GPIO pin, RA5, high using LATA5.
 
   @Description
@@ -2536,6 +2682,152 @@
 
 */
 #define SS1_SetDigitalOutput() (_TRISF12 = 0)
+/**
+  @Summary
+    Sets the GPIO pin, RG0, high using LATG0.
+
+  @Description
+    Sets the GPIO pin, RG0, high using LATG0.
+
+  @Preconditions
+    The RG0 must be set to an output.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Set RG0 high (1)
+    EN_RS485_1_SetHigh();
+    </code>
+
+*/
+#define EN_RS485_1_SetHigh()          (_LATG0 = 1)
+/**
+  @Summary
+    Sets the GPIO pin, RG0, low using LATG0.
+
+  @Description
+    Sets the GPIO pin, RG0, low using LATG0.
+
+  @Preconditions
+    The RG0 must be set to an output.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Set RG0 low (0)
+    EN_RS485_1_SetLow();
+    </code>
+
+*/
+#define EN_RS485_1_SetLow()           (_LATG0 = 0)
+/**
+  @Summary
+    Toggles the GPIO pin, RG0, using LATG0.
+
+  @Description
+    Toggles the GPIO pin, RG0, using LATG0.
+
+  @Preconditions
+    The RG0 must be set to an output.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Toggle RG0
+    EN_RS485_1_Toggle();
+    </code>
+
+*/
+#define EN_RS485_1_Toggle()           (_LATG0 ^= 1)
+/**
+  @Summary
+    Reads the value of the GPIO pin, RG0.
+
+  @Description
+    Reads the value of the GPIO pin, RG0.
+
+  @Preconditions
+    None.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    uint16_t portValue;
+
+    // Read RG0
+    postValue = EN_RS485_1_GetValue();
+    </code>
+
+*/
+#define EN_RS485_1_GetValue()         _RG0
+/**
+  @Summary
+    Configures the GPIO pin, RG0, as an input.
+
+  @Description
+    Configures the GPIO pin, RG0, as an input.
+
+  @Preconditions
+    None.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Sets the RG0 as an input
+    EN_RS485_1_SetDigitalInput();
+    </code>
+
+*/
+#define EN_RS485_1_SetDigitalInput()  (_TRISG0 = 1)
+/**
+  @Summary
+    Configures the GPIO pin, RG0, as an output.
+
+  @Description
+    Configures the GPIO pin, RG0, as an output.
+
+  @Preconditions
+    None.
+
+  @Returns
+    None.
+
+  @Param
+    None.
+
+  @Example
+    <code>
+    // Sets the RG0 as an output
+    EN_RS485_1_SetDigitalOutput();
+    </code>
+
+*/
+#define EN_RS485_1_SetDigitalOutput() (_TRISG0 = 0)
 
 /**
     Section: Function Prototypes

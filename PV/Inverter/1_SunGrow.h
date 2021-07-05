@@ -32,13 +32,15 @@
 #define	XC_HEADER_TEMPLATE_H
 
 #include <xc.h> // include processor files - each processor file is guarded.  
-
+#include "0_Inverter.h"
 // TODO Insert appropriate #include <>
 
 // TODO Insert C++ class definitions if appropriate
 
 // TODO Insert declarations
-
+void SG110CX_Initialization(DEVICE_INFOR *Inv);
+void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type);
+//void Getdata_SG110CX(uint8_t index);
 // Comment a function and leverage automatic documentation with slash star star
 /**
     <p><b>Function prototype:</b></p>

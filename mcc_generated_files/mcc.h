@@ -53,19 +53,19 @@
 #include "system_types.h"
 #include "reset.h"
 
-#include "tmr2.h"
-#include "uart1.h"
-#include "reset.h"
-#include "watchdog.h"
-#include "uart2.h"
-#include "drivers/i2c_simple_master.h"
 #include "i2c2_driver.h"
+#include "spi1.h"
 #include "interrupt_manager.h"
 #include "traps.h"
+#include "tmr2.h"
+#include "watchdog.h"
+#include "drivers/i2c_simple_master.h"
 #include "drivers/i2c_master.h"
-#include "spi1.h"
+#include "uart2.h"
+#include "uart1.h"
+#include "reset.h"
 
-//#warning "This file will be removed in future MCC releases. Use system.h instead."
+#warning "This file will be removed in future MCC releases. Use system.h instead."
 
 #endif	/* MCC_H */
 /**

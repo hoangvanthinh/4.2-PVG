@@ -1,5 +1,5 @@
-build/default/production/Modbus/ModbusRTU_Slave.o: \
- Modbus/ModbusRTU_Slave.c Modbus/../SES.h \
+build/default/production/Modbus/ModbusRTU_Master.o: \
+ Modbus/ModbusRTU_Master.c Modbus/../SES.h \
  Modbus/../mcc_generated_files/mcc.h \
  Modbus/../mcc_generated_files/system.h \
  Modbus/../mcc_generated_files/system_types.h \

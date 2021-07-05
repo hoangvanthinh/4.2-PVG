@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project>
-  <executable name="dist/default/production/4.2-PVG.X.production.elf">
+  <executable name="dist/default/production/4.2-PVG.production.elf">
     <memory name="data">
       <units>bytes</units>
       <length>53248</length>
-      <used>45890</used>
-      <free>7358</free>
+      <used>32650</used>
+      <free>20598</free>
     </memory>
     <memory name="program">
       <units>bytes</units>
       <length>524544</length>
-      <used>67965</used>
-      <free>456579</free>
+      <used>82593</used>
+      <free>441951</free>
     </memory>
   </executable>
 </project>

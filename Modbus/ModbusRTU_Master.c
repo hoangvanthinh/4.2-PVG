@@ -3,13 +3,15 @@
 
 
 MODBUS SES_Modbus;
-MODBUS_MASTER_TELEGRAM telegram[4];
-uint16_t BUFF_INPUTREGS[125];
-uint16_t au16data[125], au16data1[125], au16data2[125]; //!< data array for modbus network sharing
+MODBUS_MASTER_TELEGRAM telegram[MAX_DEVICE*MAX_FRAME];
+__eds__ __attribute ((eds))uint16_t RTU_Buffer[MAX_DEVICE][350];
+__eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE][350];
+//uint16_t BUFF_INPUTREGS[125];
+//uint16_t au16data[125], au16data1[125], au16data2[125]; //!< data array for modbus network sharing
 static uint8_t u8state; //!< machine state
 static uint8_t u8query; //!< pointer to message query
 static unsigned long u32wait;
-static int8_t MAX_Query = 0;
+uint8_t MAX_Query = 0;
 //=============================================================================
 static void SES_Modbus_setup(uint8_t u8id, char port, uint8_t u8txenpin);
 static void SES_ModbusRTU_Frame_Transaction(void);
@@ -20,9 +22,9 @@ static void SES_Modbus_setTimeOut( uint16_t u16timeOut); //!<write communication
 static int8_t SES_Modbus_query( MODBUS_MASTER_TELEGRAM telegram ); //!<only for master
 static int8_t SES_Modbus_Master_poll(void); //!<cyclic poll for master
 static uint8_t validateAnswer();
-static uint16_t SES_Modbus_getInCnt(void); //!<number of incoming messages
-static uint16_t SES_Modbus_getOutCnt(void); //!<number of outcoming messages
-static uint16_t SES_Modbus_getErrCnt(void); //!<error counter
+//static uint16_t SES_Modbus_getInCnt(void); //!<number of incoming messages
+//static uint16_t SES_Modbus_getOutCnt(void); //!<number of outcoming messages
+//static uint16_t SES_Modbus_getErrCnt(void); //!<error counter
 //static uint8_t SES_Modbus_getID(void); //!<get slave ID between 1 and 247
 static uint8_t SES_Modbus_getState(void);
 //static uint8_t SES_Modbus_getLastError(); //!<get last error message
@@ -58,6 +60,9 @@ static const unsigned char fctsupported[] =
  */
 static uint8_t validateAnswer()
 {
+    // check ID slave
+    if(SES_Modbus.au8Buffer[ID] != SES_Modbus.u8id)
+        return EXC_ADDR_RANGE;
     // check message crc vs calculated crc
     uint16_t u16MsgCRC =
         ((SES_Modbus.au8Buffer[SES_Modbus.u8BufferSize - 2] << 8)
@@ -96,6 +101,7 @@ static uint8_t validateAnswer()
 }
 void SES_ModbusRTU_Master_Process(void)
 {
+    static uint8_t N=0;
     switch( u8state ) 
      {
          case 0: 
@@ -105,18 +111,29 @@ void SES_ModbusRTU_Master_Process(void)
 
            SES_Modbus_query( telegram[u8query] ); // send query (only once)
            u8state++;
-           u8query++;
-
-           if (u8query >= MAX_Query) u8query = 0;
+//           u8query++;
+//
+//           if (u8query >= MAX_Query) u8query = 0;
            break;
          case 2:///////////////////////////////////////////////////////
 
            SES_Modbus_Master_poll(); // check incoming messages
            if (SES_Modbus_getState() == COM_IDLE) {
-             u8state = 0;
-             u32wait = millis() + SCAN_RATE; 
-
+                u8state = 0;
+                u32wait = millis() + SCAN_RATE;
+                if(u8query - N >= (G42.Dev_rtu[telegram[u8query].u8id-1].Dev_Setup.NumFr - 1))
+                {
+                    Device_RTU_GetData(telegram[u8query].u8id-1);
+                    N++;
+                }
+                u8query++;
+                if (u8query >= MAX_Query)
+                {
+                    u8query = 0;
+                    N = 0;
+                }
            }
+           
 
            break;
      }
@@ -126,43 +143,45 @@ void SES_ModbusRTU_Master_Process(void)
 }
 
 static void SES_ModbusRTU_Frame_Transaction(void)
-{
-   
-//    telegram[0].u8id = 1; // slave address
-//    telegram[0].u8fct = 4; // function code (this one is write a single register)
-//    telegram[0].u16RegAdd = 0; // start address in slave
-//    telegram[0].u16CoilsNo = 100; // number of elements (coils or registers) to read
-//    telegram[0].au16reg = BUFF_INPUTREGS; // pointer to a memory array 
-   
-    telegram[0].u8id       = SES_Device->ID;
-    telegram[0].u8fct      = SES_Device->Func; 
-    telegram[0].u16RegAdd  = SES_Device->REGsAdd; 
-    telegram[0].u16CoilsNo = SES_Device->NumberREGs;     
-    telegram[0].au16reg    = BUFF_INPUTREGS; 
-    
-    telegram[1].u8id = 2; // slave address
-    telegram[1].u8fct = 16; // function code (this one is write a single register)
-    telegram[1].u16RegAdd = 0; // start address in slave
-    telegram[1].u16CoilsNo = 100; // number of elements (coils or registers) to read
-    telegram[1].au16reg = BUFF_INPUTREGS; // pointer to a memory array 
-    
- 
+{  
+    uint8_t i,j;
+    static uint8_t k=0;
+    Device_RTU_Init();
+    for(i=0; i<G42.Num_Dev_rtu; i++)
+    {
+        for(j=0; j<G42.Dev_rtu[i].Dev_Setup.NumFr; j++)
+        {
+            telegram[k].u8id = i+1;
+            telegram[k].u8fct = G42.Dev_rtu[i].Dev_Setup.Func;
+            telegram[k].u16RegAdd = G42.Dev_rtu[i].Dev_Setup.Fr[j].u16RegAdd;
+            telegram[k].u16CoilsNo = G42.Dev_rtu[i].Dev_Setup.Fr[j].u16CoilsNo;
+            telegram[k].u16Pointer = G42.Dev_rtu[i].Dev_Setup.Fr[j].pointer;
+            telegram[k].au16reg = RTU_Buffer[i]+telegram[k].u16Pointer;
+            k++;
+        }
+    }
 }
 void SES_ModbusRTU_Master_Init(void)
 {
+    uint8_t i;
+    uint8_t N=0;
     SES_ModbusRTU_Frame_Transaction();
     SES_Modbus_setup(0,0,RS485);
-    MAX_Query = 2;
+    for(i=0; i<G42.Num_Dev_rtu; i++)
+    {
+        N=N+G42.Dev_rtu[i].Dev_Setup.NumFr;
+    }
+    MAX_Query = N;
     SES_Modbus_start();   
     SES_Modbus_setTimeOut(TIMEOUT_RTU);
     u32wait = millis() + 1000;
-    u8state = u8query = 0;    
+    u8state = u8query = 0; 
 }
 static void SES_Modbus_setup(uint8_t u8id, char port, uint8_t u8txenpin)
 {    
-    SES_Modbus.u8id = u8id;
+//    SES_Modbus.u8id = u8id;
     SES_Modbus.u8txenpin = u8txenpin;
-    SES_Modbus.u16timeOut = 1000;
+//    SES_Modbus.u16timeOut = TIMEOUT_RTU;
     SES_Modbus.u32overTime = 0;
      
 }
@@ -244,10 +263,10 @@ static void SES_Modbus_setTimeOut( uint16_t u16timeOut)
  * @return input messages counter
  * @ingroup buffer
  */
-static uint16_t SES_Modbus_getInCnt(void)
-{
-    return SES_Modbus.u16InCnt;
-}
+//static uint16_t SES_Modbus_getInCnt(void)
+//{
+//    return SES_Modbus.u16InCnt;
+//}
 /**
  * @brief
  * Get transmitted messages counter value
@@ -256,10 +275,10 @@ static uint16_t SES_Modbus_getInCnt(void)
  * @return transmitted messages counter
  * @ingroup buffer
  */
-static uint16_t SES_Modbus_getOutCnt(void)
-{
-    return SES_Modbus.u16OutCnt;
-}
+//static uint16_t SES_Modbus_getOutCnt(void)
+//{
+//    return SES_Modbus.u16OutCnt;
+//}
 
 /**
  * @brief
@@ -269,10 +288,10 @@ static uint16_t SES_Modbus_getOutCnt(void)
  * @return errors counter
  * @ingroup buffer
  */
-static uint16_t SES_Modbus_getErrCnt(void)
-{
-    return SES_Modbus.u16errCnt;
-}
+//static uint16_t SES_Modbus_getErrCnt(void)
+//{
+//    return SES_Modbus.u16errCnt;
+//}
 /**
  * Get modbus master state
  *
@@ -313,10 +332,10 @@ static uint8_t SES_Modbus_getState(void)
 static int8_t SES_Modbus_query( MODBUS_MASTER_TELEGRAM telegram )
 {
     uint8_t u8regsno, u8bytesno;
-    uint16_t *au16regs;
+    __eds__ uint16_t *au16regs;
     au16regs = telegram.au16reg;
     
-    if (SES_Modbus.u8id!=0) return -2;
+//    if (SES_Modbus.u8id!=0) return -2;
     if (SES_Modbus.u8state != COM_IDLE) return -1;
 
     if ((telegram.u8id==0) || (telegram.u8id>247)) return -3;
@@ -324,6 +343,7 @@ static int8_t SES_Modbus_query( MODBUS_MASTER_TELEGRAM telegram )
     SES_Modbus.au16regs = telegram.au16reg;
 
     // telegram header
+    SES_Modbus.u8id = telegram.u8id;
     SES_Modbus.au8Buffer[ ID ]         = telegram.u8id;
     SES_Modbus.au8Buffer[ FUNC ]       = telegram.u8fct;
     SES_Modbus.au8Buffer[ ADD_HI ]     = highByte(telegram.u16RegAdd );
@@ -424,7 +444,7 @@ static int8_t SES_Modbus_Master_poll(void)
 	uint8_t u8current;
     u8current = UART1_RxDataAvailable();
 
-    if ((unsigned long)(millis() - SES_Modbus.u32timeOut) > (unsigned long)SES_Modbus.u16timeOut)
+    if ((uint32_t)(millis() - SES_Modbus.u32timeOut) > (uint32_t)SES_Modbus.u16timeOut)
     {
         SES_Modbus.u8state = COM_IDLE;
         SES_Modbus.u8lastError = NO_REPLY;
@@ -629,15 +649,15 @@ static uint16_t SES_Modbus_calcCRC(uint8_t u8length)
  *
  * @ingroup buffer
  */
-static void buildException( uint8_t u8exception )
-{
-    uint8_t u8func = SES_Modbus.au8Buffer[ FUNC ];  // get the original FUNC code
-
-    SES_Modbus.au8Buffer[ ID ]      = SES_Modbus.u8id;
-    SES_Modbus.au8Buffer[ FUNC ]    = u8func + 0x80;
-    SES_Modbus.au8Buffer[ 2 ]       = u8exception;
-    SES_Modbus.u8BufferSize         = EXCEPTION_SIZE;
-}
+//static void buildException( uint8_t u8exception )
+//{
+//    uint8_t u8func = SES_Modbus.au8Buffer[ FUNC ];  // get the original FUNC code
+//
+//    SES_Modbus.au8Buffer[ ID ]      = SES_Modbus.u8id;
+//    SES_Modbus.au8Buffer[ FUNC ]    = u8func + 0x80;
+//    SES_Modbus.au8Buffer[ 2 ]       = u8exception;
+//    SES_Modbus.u8BufferSize         = EXCEPTION_SIZE;
+//}
 /**
  * This method processes functions 1 & 2 (for master)
  * This method puts the slave answer into master data buffer

@@ -49,14 +49,15 @@ typedef struct
     uint8_t u8id;          /*!< Slave address between 1 and 247. 0 means broadcast */
     uint8_t u8fct;         /*!< Function code: 1, 2, 3, 4, 5, 6, 15 or 16 */
     uint16_t u16RegAdd;    /*!< Address of the first register to access at slave/s */
-    uint16_t u16CoilsNo;   /*!< Number of coils or registers to access */
-    uint16_t *au16reg;     /*!< Pointer to memory image in master */
+    uint16_t u16CoilsNo;
+    uint16_t u16Pointer;/*!< Number of coils or registers to access */
+    __eds__ uint16_t *au16reg;     /*!< Pointer to memory image in master */
 }MODBUS_MASTER_TELEGRAM;
 
 
-    extern uint16_t BUFF_INPUTREGS[125];
-    void SES_ModbusRTU_Master_Process(void);
-    void SES_ModbusRTU_Master_Init(void);
+
+void SES_ModbusRTU_Master_Process(void);
+void SES_ModbusRTU_Master_Init(void);
 
 //    void end(); //!<finish any communication and release serial communication port
 // TODO Insert appropriate #include <>
