@@ -77,14 +77,14 @@ int main(void)
     
     while (1)
     {
-        if(TickGet() - tM1 >= TICK_SECOND/15) 
-        {
-             tM1 = TickGet() ; 
-             MB1_BLUE_Toggle();               
-        }
+//        if(TickGet() - tM1 >= TICK_SECOND/15) 
+//        {
+//             tM1 = TickGet() ; 
+//             MB1_BLUE_Toggle();
+//        }
         if(TickGet() - t >= TICK_SECOND) 
         {
-             t = TickGet() ; 
+            t = TickGet() ;
              RD_RED_Toggle();
         }
      
