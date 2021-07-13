@@ -143,7 +143,6 @@ static void InitAppConfig(void)
 
 static void SES_Modbus_TCPIP_Frame_Setup(void)
 {
-    Device_TCP_Init();
     uint8_t i,j;
     static uint8_t k=0;
     for(i=0; i<G42.Num_Dev_tcp; i++)
@@ -170,6 +169,7 @@ void SES_ModbusTCP_Client_Init(void)
     ENC_RST_IO = 1;
     static uint16_t M=0;
     uint8_t i;
+    Device_TCP_Init();
     InitAppConfig() ;
     StackInit() ;
     for(i=0; i<G42.Num_Dev_tcp; i++)
@@ -323,7 +323,7 @@ static void get_FC3(void)
 {
     uint8_t  i;
   
-
+    MB1_BLUE_Toggle();
     for (i=0; i< SES_Modbus.au8Buffer[ 8 ] /2; i++)
     {
         SES_Modbus.au16regs[ i ] = word(
@@ -402,7 +402,7 @@ static MODBUS_CLIENT_STATE ModbusRequestTask(void)
 			{
 				if( !TCPIsConnected(MySocket))// || TCPWasReset(MySocket) )
 				{
-
+                   
 					//if(TickGet()-Timer > 1.5*TICK_SECOND)
                     if((float)TickGet()-(float)Timer > 1.5 *(float)TICK_SECOND)
 //					if((float)TickGet()-(float)Timer > 6.0f*(float)TICK_SECOND)
@@ -448,7 +448,6 @@ static MODBUS_CLIENT_STATE ModbusRequestTask(void)
                         
 						break;
 					}
-				
 							
 				}	
                 break;	
