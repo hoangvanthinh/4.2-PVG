@@ -20,7 +20,7 @@ void Weather_TCP_GetData(uint8_t index)
     Weather[I_Wea].AIR_H = TCP_Buffer[index][4];
     Weather[I_Wea].RAIN = TCP_Buffer[index][5];
     Weather[I_Wea].ATMOSPHERIC = TCP_Buffer[index][6];
-    printf("\nType of device: Weahter Station\n");
+    printf("\nType of device: Weather Station\n");
     printf("WIND_SPEED: %d\n", Weather[I_Wea].WIND_SPEED);
     printf("WIND_DIRECTION: %d\n", Weather[I_Wea].WIND_DIRECTION);
     printf("IRRADIATION: %d\n", Weather[I_Wea].IRRADIATION);
@@ -28,6 +28,7 @@ void Weather_TCP_GetData(uint8_t index)
     printf("AIR_H: %d\n", Weather[I_Wea].AIR_H);
     printf("RAIN: %d\n", Weather[I_Wea].RAIN);
     printf("ATMOSPHERIC: %d\n", Weather[I_Wea].ATMOSPHERIC);
+
     I_Wea++;
     if(I_Wea >= G42.Num_weather)
     {
