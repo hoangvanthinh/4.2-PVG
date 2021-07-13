@@ -68,7 +68,8 @@
 
 enum INVERTER_NAME
 {
-    SG110CX = 0
+    SG110CX = 0,
+    SUN6KG03
 };
 
 enum INVETER_OPERATING_STATE
@@ -166,7 +167,7 @@ extern __eds__ __attribute ((eds))INVERTER_DATA InvData_TCP[MAX_INVERTER_TCP];
 void Inverter_RTU_Init(uint8_t index);
 void Inverter_TCP_Init(uint8_t index);
 void Inverter_RTU_GetData(uint8_t index);
-//void GetData_From_Inverter_TCP(void);
+void Inverter_TCP_GetData(uint8_t index);
 #ifdef	__cplusplus
 extern "C" {
 #endif /* __cplusplus */
