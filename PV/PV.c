@@ -75,7 +75,7 @@ void Device_TCP_GetData(uint8_t index)
     switch(G42.Dev_tcp[index].Dev_Setup.Dev_type)
     {
         case INVERTER:
-            
+            Inverter_TCP_GetData(index);
             break;
         case PANEL:
             break;
