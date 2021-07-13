@@ -71,7 +71,7 @@ void Read_G42_Setup(void) {
         G42.LOCAL_SERVER.PORT.val16 = 502;
         
         G42.Num_inverter_rtu = 1;
-        G42.Num_inverter_tcp = 0;
+        G42.Num_inverter_tcp = 1;
         G42.Num_panel_rtu = 0;
         G42.Num_panel_tcp = 0;
         G42.Num_str_combiner_rtu = 0;
@@ -81,10 +81,10 @@ void Read_G42_Setup(void) {
         G42.Num_weather = 1;
         
         G42.Num_Dev_rtu = 1;
-        G42.Num_Dev_tcp = 1;
+        G42.Num_Dev_tcp = 2;
         
         G42.Dev_rtu[0].Dev_Setup.Dev_type = INVERTER;
-        G42.Dev_rtu[0].Dev_Setup.Series = SG110CX;
+        G42.Dev_rtu[0].Dev_Setup.Series = SUN6KG03;
         G42.Dev_rtu[0].Dev_Setup.UID = 1;
 
         G42.Dev_tcp[0].Dev_Setup.Dev_type = WEATHER_STATION;
@@ -93,6 +93,13 @@ void Read_G42_Setup(void) {
         G42.Dev_tcp[0].IP[1] = 168;
         G42.Dev_tcp[0].IP[2] = 0;
         G42.Dev_tcp[0].IP[3] = 3;
+        
+        G42.Dev_tcp[1].Dev_Setup.Dev_type = INVERTER;
+        G42.Dev_tcp[1].Dev_Setup.Series = SG110CX;
+        G42.Dev_tcp[1].IP[0] = 192;
+        G42.Dev_tcp[1].IP[1] = 168;
+        G42.Dev_tcp[1].IP[2] = 0;
+        G42.Dev_tcp[1].IP[3] = 10;
     
         
     //}
@@ -315,7 +322,7 @@ void Information_Device(void) {
         printf("ID of Device RTU [%d]: %d\r", i, G42.Dev_rtu[i].Dev_Setup.UID);
     }  
     for (i = 0; i < G42.Num_Dev_tcp; i++) {
-        printf("IP of Device RTU [%d]: %d.%d.%d.%d\r", i, G42.Dev_tcp[i].IP[0]
+        printf("IP of Device TCP [%d]: %d.%d.%d.%d\r", i, G42.Dev_tcp[i].IP[0]
                 , G42.Dev_tcp[i].IP[1]
                 , G42.Dev_tcp[i].IP[2]
                 , G42.Dev_tcp[i].IP[3]
@@ -329,4 +336,11 @@ uint32_t convert16to32(uint16_t h, uint16_t l)
     uint32_t u32;
     u32 = ((uint32_t)h)<<16 | (uint32_t)l;
     return u32;
+}
+ 
+uint64_t convert16to64(uint16_t a, uint16_t b, uint16_t c, uint16_t d)
+{
+    uint64_t  u64;
+    u64 = ((uint64_t)a)<<48 | ((uint64_t)b)<<32 | ((uint64_t)c)<<16 | (uint64_t)d;
+    return u64;
 }
