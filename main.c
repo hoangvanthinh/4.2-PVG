@@ -66,7 +66,7 @@ int main(void)
     SES_ModbusTCP_Client_Init();
     SES_ModbusRTU_Master_Init();
     SES_ModbusRTU_Slave_start(); 
-
+    
     // SIM
     SIM_PWR_SetHigh();
     SPEAKER_SetHigh();
@@ -84,8 +84,9 @@ int main(void)
 //        }
         if(TickGet() - t >= TICK_SECOND) 
         {
-            t = TickGet() ;
-             RD_RED_Toggle();
+            t = TickGet();
+            Display_PV_paramenters();
+            RD_RED_Toggle();
         }
      
         SES_ModbusRTU_Master_Process();
