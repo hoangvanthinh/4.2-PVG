@@ -36,7 +36,7 @@
 //    static UINT8 Num_Weather = 1;
 //#endif
 
-static UINT16 MAX_Query =0;
+UINT16 MAX_Query_TCP =0;
 static char bModbusClientInitialised = 0;
 static MODBUS_CLIENT_STATE ModbusClientState = (MODBUS_CLIENT_STATE)MBCS_HOME;
 static uint16_t Frame_len;
@@ -58,8 +58,10 @@ static uint16_t C_u16MBProtocolID                         = 0;       ///< Consta
 
 //=========================================================================================
 static MODBUS SES_Modbus;
-//static MODBUS_CLIENT_TELEGRAM Client_telegram[MAX_NUM_METER*NUM_FRAME_METER*2];
-MODBUS_CLIENT_TELEGRAM Client_telegram[MAX_NUM_WEATHER_STATION*NUM_FRAME_WEATHER];  //50x3x2
+
+MODBUS_CLIENT_TELEGRAM Client_telegram[MAX_DEVICE*MAX_FRAME];  //50x3x2
+__eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE][350];
+
 // static uint16_t   Data42L[MAX_NUM_METER][350];
 
  UINT16 Sum_numof_Meter, Sum_Num_Frame;
@@ -79,7 +81,7 @@ unsigned char fctsupported[] =
     MB_FC_WRITE_MULTIPLE_REGISTERS
 };
 //============================= APP config ================================
- APP_CONFIG AppConfig ;
+APP_CONFIG AppConfig ;
 static  uint8_t SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_BYTE2, 
 		MY_DEFAULT_MAC_BYTE3, MY_DEFAULT_MAC_BYTE4, MY_DEFAULT_MAC_BYTE5, MY_DEFAULT_MAC_BYTE6};
 
@@ -156,10 +158,12 @@ static void SES_Modbus_TCPIP_Frame_Setup(void)
             Client_telegram[k].INFOR.Frame.u16CoilsNo = G42.Dev_tcp[i].Dev_Setup.Fr[j].u16CoilsNo;
             Client_telegram[k].INFOR.Frame.u16RegAdd = G42.Dev_tcp[i].Dev_Setup.Fr[j].u16RegAdd;
             Client_telegram[k].INFOR.Frame.pointer = G42.Dev_tcp[i].Dev_Setup.Fr[j].pointer;
-            Client_telegram[k].au16reg = TCP_Buffer[i]+Client_telegram[k].INFOR.Frame.pointer;
+            Client_telegram[k].au16reg = TCP_Buffer[i]+Client_telegram[k].INFOR.Frame.pointer;          
             k++;
         }
-    }   
+    }
+    //Error IP here
+    
 }
 void SES_ModbusTCP_Client_Init(void)
 {
@@ -169,15 +173,16 @@ void SES_ModbusTCP_Client_Init(void)
     ENC_RST_IO = 1;
     static uint16_t M=0;
     uint8_t i;
+    InitAppConfig();
+    StackInit();
     Device_TCP_Init();
-    InitAppConfig() ;
-    StackInit() ;
     for(i=0; i<G42.Num_Dev_tcp; i++)
     {
         M = M+(uint16_t)(G42.Dev_tcp[i].Dev_Setup.NumFr);
     }
-    MAX_Query = M;
+    MAX_Query_TCP = M;
     SES_Modbus_TCPIP_Frame_Setup();
+    
  
 }
 
@@ -200,7 +205,7 @@ static int8_t SES_Modbus_query( MODBUS_CLIENT_TELEGRAM telegram )
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = telegram.INFOR.u8id;
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = telegram.INFOR.u8fct;
           
-    SES_Modbus.au8Buffer[SES_Modbus_Size++] = highByte(telegram.INFOR.Frame.u16CoilsNo);
+    SES_Modbus.au8Buffer[SES_Modbus_Size++] = highByte(telegram.INFOR.Frame.u16RegAdd);
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = lowByte(telegram.INFOR.Frame.u16RegAdd);
     
     switch(telegram.INFOR.u8fct)
@@ -270,7 +275,7 @@ static void SES_ModbusReq(void)
             num_query++;
         }
         query++;
-        if(query >= MAX_Query)
+        if(query >= MAX_Query_TCP)
         {
             query = 0;
             num_query = 0;
@@ -429,7 +434,7 @@ static MODBUS_CLIENT_STATE ModbusRequestTask(void)
 //                    if(query == 0)
 //                    {
 //                        Client_telegram[0].u8id ++;
-//                        if(Client_telegram[0].u8id >= MAX_Query)
+//                        if(Client_telegram[0].u8id >= MAX_Query_TCP)
 //                            Client_telegram[0].u8id = 1;
 //                        Client_telegram[0].au16reg = Data42L[Client_telegram[0].u8id-1];
 //                    }
