@@ -47,7 +47,7 @@ void Read_G42_Setup(void) {
         G42.IP[0] = 192;
         G42.IP[1] = 168;
         G42.IP[2] = 0;
-        G42.IP[3] = 2;
+        G42.IP[3] = 5;
 
         G42.SubnetMask[0] = 255;
         G42.SubnetMask[1] = 255;
@@ -59,10 +59,10 @@ void Read_G42_Setup(void) {
         G42.Gateway[2] = 0;
         G42.Gateway[3] = 1;
 
-        G42.DNS[0] = 192;
-        G42.DNS[1] = 168;
+        G42.DNS[0] = 0;
+        G42.DNS[1] = 0;
         G42.DNS[2] = 0;
-        G42.DNS[3] = 1;
+        G42.DNS[3] = 0;
         
         G42.LOCAL_SERVER.IP[0] = 192;
         G42.LOCAL_SERVER.IP[1] = 168;
@@ -100,7 +100,6 @@ void Read_G42_Setup(void) {
         G42.Dev_tcp[1].IP[1] = 168;
         G42.Dev_tcp[1].IP[2] = 0;
         G42.Dev_tcp[1].IP[3] = 10;
-    
         
     //}
     //EEPROM_WP_SetHigh();
