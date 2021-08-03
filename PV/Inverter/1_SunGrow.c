@@ -14,7 +14,7 @@ void SG110CX_Initialization(DEVICE_INFOR *Inv)
 
 void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
 {
-
+    
     __eds__ INVERTER_DATA *inv_data;
     __eds__ uint16_t *Buffer;
     if(type == MODBUS_RTU)
@@ -29,7 +29,6 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
     }
     if (type == MODBUS_RTU || type == MODBUS_TCP)
     {
-        printf("\nDevice Name: SG110CX\n");
         //AC Data
         (*inv_data).AC.P = (INT16)((uint32_t)((convert16to32(Buffer[31],Buffer[30]))/1000));
         (*inv_data).AC.W_SF = 0;
@@ -37,14 +36,13 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
         (*inv_data).AC.VA_SF = 0;
         (*inv_data).AC.S = (INT16)((convert16to32(Buffer[9],Buffer[8]))/1000);
         (*inv_data).AC.VAr_SF = 0;
-        printf("Total power: %d\nTotal reactive power: %d\nTotal apparent power: %d\n",(*inv_data).AC.P,(*inv_data).AC.Q,(*inv_data).AC.S);
+        
         if(Buffer[1]==1)
         {
             (*inv_data).AC.AN = Buffer[18];
             (*inv_data).AC.BN = Buffer[19];
             (*inv_data).AC.CN = Buffer[20];
             (*inv_data).AC.V_SF = -1;
-            printf("Voltage of phase: %d %d %d\n",(*inv_data).AC.AN,(*inv_data).AC.BN,(*inv_data).AC.CN);
         }
         else if(Buffer[1]==2)
         {
@@ -52,26 +50,23 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
             (*inv_data).AC.VBC = Buffer[19];
             (*inv_data).AC.VCA = Buffer[20];
             (*inv_data).AC.V_SF = -1;
-            printf("Voltage of line: %d %d %d\n",(*inv_data).AC.VAB,(*inv_data).AC.VBC,(*inv_data).AC.VCA);
         }
         (*inv_data).AC.IA = Buffer[21];
         (*inv_data).AC.IB = Buffer[22];
         (*inv_data).AC.IC = Buffer[23];
         (*inv_data).AC.A_SF = -1;
         (*inv_data).AC.EP = (uint64_t)(convert16to32(Buffer[4],Buffer[3]));
+        
         (*inv_data).AC.PF = Buffer[34];
         (*inv_data).AC.PF_SF = -3;
+        
         (*inv_data).AC.F = Buffer[35];
         (*inv_data).AC.Hz_SF = -1;
-        printf("Current of phase: %d %d %d\n",(*inv_data).AC.IA,(*inv_data).AC.IB,(*inv_data).AC.IC);
-        printf("Total power yields: %lld\n",(*inv_data).AC.EP);
-        printf("Power factor: %d\n",(*inv_data).AC.PF);
-        printf("Frequency: %d\n",(*inv_data).AC.F);
 
         //DC data
         (*inv_data).DC.P_DC = (INT16)((convert16to32(Buffer[17],Buffer[16]))/1000);
         (*inv_data).DC.DCW_SF = 0;
-        printf("DC power: %d\n",(*inv_data).DC.P_DC);
+        
         //Event
         switch(Buffer[44])
         {
@@ -125,7 +120,7 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
                 break;
             }
         }
-        printf("Event: %d\n",(*inv_data).Event);
+        
         //State
         switch(Buffer[37])
         {
@@ -150,10 +145,9 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
                 break;
             }
         }
-        printf("State: %d\n",(*inv_data).Operating_State);
+        
         //Temperature
         (*inv_data).T.T_Cabinet = Buffer[7];
         (*inv_data).T.Tmp_SF = -1;
-        printf("Temperature: %d\n",(*inv_data).T.T_Cabinet);
     }
 }
