@@ -1,5 +1,8 @@
 #include "../SES.h"
 
+CONTROL_INFOR gCtrlInfor;
+DEVICE_CTRL_INFOR gCtrlSetup;
+DEVICE_INFOR gCtrlResponse;
 
 void Device_RTU_Init(void)
 {
@@ -52,6 +55,7 @@ void Device_TCP_Init(void)
 
 void Device_RTU_GetData(uint8_t index)
 {
+    
     switch(G42.Dev_rtu[index].Dev_Setup.Dev_type)
     {
         case INVERTER:
@@ -67,6 +71,20 @@ void Device_RTU_GetData(uint8_t index)
             break;
         default:
             break;              
+    }
+}
+
+void Device_RTU_ResponseCtrl(void)
+{
+    switch(gCtrlInfor.Dev_Type)
+    {
+        case INVERTER:
+            Inverter_RTU_ResponseCtrl();
+            break;
+        case CONTROL_IO:
+            break;
+        default:
+            break;
     }
 }
 
@@ -155,4 +173,18 @@ void Display_PV_paramenters(void)
     if(di>2)
         di=0;
 
+}
+
+void Device_RTU_CtrlStrToBuffer(void)
+{
+    switch(gCtrlInfor.Dev_Type)
+    {
+        case INVERTER:
+            Inverter_RTU_CtrlStrToBuffer();
+            break;
+        case CONTROL_IO:
+            break;
+        default:
+            break;
+    }
 }
