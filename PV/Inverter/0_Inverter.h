@@ -69,7 +69,8 @@
 enum INVERTER_NAME
 {
     SG110CX = 0,
-    SUN6KG03
+    SUN6KG03,
+    STP50
 };
 
 enum INVETER_OPERATING_STATE
@@ -84,6 +85,7 @@ enum INVETER_OPERATING_STATE
     STANDBY
             
 };
+
 enum INVERTER_EVENT
 {
     GROUND_FAULT = 0,
@@ -101,8 +103,32 @@ enum INVERTER_EVENT
     BLOWN_STRING_FUSE,
     UNDER_TEMP,
     MEMORY_LOSS,
-    HW_TEST_FAILURE,
-  
+    HW_TEST_FAILURE
+};
+
+enum PVCONN
+{
+    PV_CONNECTED = 0,
+    PV_AVAILABLE,
+    PV_IN_OPERATION
+};
+
+enum ECPCONN
+{
+    ECP_DISCONNECTED = 0,
+    ECP_CONNECTED
+};
+
+enum DC_EVENT
+{
+    INPUT_UNDER_VOLTAGE,
+    INPUT_OVER_CURRENT
+};
+
+enum CONN
+{
+    DISCONNECT = 0,
+    CONNECT
 };
 typedef struct
 {
@@ -134,14 +160,24 @@ typedef struct
     
 }AC_Electric;
 
+typedef struct
+{
+    UINT16 ID;      //Input ID
+    UINT16 IDStr[8];  //Input ID string
+    UINT16 DCA;
+    UINT16 DCV;
+    UINT16 DCW;
+    UINT32 DCWH;
+    UINT16 DCEvt;
+}MPPT_MODULE;;
 
 typedef struct
 {
     UINT16 I_DC, U_DC, P_DC;
     INT16 DCA_SF,DCV_SF,DCW_SF;
+    UINT16 N;
+    MPPT_MODULE Mppt_module[MAX_MODULE];
 }DC_Electric;
-
-
 
 typedef struct
 {
@@ -151,23 +187,103 @@ typedef struct
     INT16 Tmp_SF;
 }TEMPERATURE_INVERTER;
 
-
 typedef struct
 {
-    char Operating_State;
-    char Event;
+    UINT16 SID;
+    UINT8  Type_Dev;
+    UINT8  Series;
+    UINT16 Operating_State;
+    UINT16 Event;
+    UINT16 PV_connect;
+    UINT16 ECP_connect;
     AC_Electric AC;
     DC_Electric DC;
     TEMPERATURE_INVERTER T;
 }INVERTER_DATA;
 
+typedef struct
+{
+    UINT16 VRef;
+    INT16 VRef_SF;
+} VOLTAGE_CONTROL;
+
+typedef struct
+{
+    UINT16 WMax;
+    //INT16 WMax_SF;
+    
+    UINT16 WMaxLimPct ; //Unit: %WMax
+    //INT16 WMaxLimPct_SF;
+    UINT16 WMaxLimPct_WinTms;
+    UINT16 WMaxLimPct_RvrtTms;
+    UINT16 WMaxLimPct_RmpTms;
+    UINT16 WMaxLim_Ena;
+} P_CONTROL;
+
+
+typedef struct
+{
+    INT16 VArMaxQ1;
+    INT16 VArMaxQ2;
+    INT16 VArMaxQ3;
+    INT16 VArMaxQ4;
+    //INT16 VArMax_SF;
+    
+    INT16 VArWMaxPct;
+    INT16 VArMaxPct;
+    INT16 VArAvalPct;
+    //INT16 VArPct_SF;
+    
+    UINT16 VArPct_WinTms;
+    UINT16 VArPct_RvrtTms;
+    UINT16 VArPct_RmpTms;
+    
+    UINT16 VArPct_Mod;
+    UINT16 VArPct_Ena;
+}Q_CONTROL;
+
+typedef struct
+{
+    INT16 OutPFSet;
+    //INT16 OutPFSet_SF;
+    
+    UINT16 OutPFSet_WinTms;
+    UINT16 OutPFSet_RvrtTms;
+    UINT16 OutPFSet_RmpTms;
+    
+    UINT16 OutPFSet_Ena;
+}PF_CONTRL;
+
+typedef struct
+{
+    UINT16 SID;
+    UINT8 Series;
+    UINT16  Connection_Control;
+    VOLTAGE_CONTROL V;
+    P_CONTROL P;
+    UINT16 VAMAX;
+    Q_CONTROL Q;
+    UINT16 ECPNomHz;
+    PF_CONTRL PF;
+}INVERTER_CONTROL;
+
 extern __eds__ __attribute ((eds))INVERTER_DATA InvData_RTU[MAX_INVERTER_RS485];
 extern __eds__ __attribute ((eds))INVERTER_DATA InvData_TCP[MAX_INVERTER_TCP];
+extern __eds__ __attribute ((eds))INVERTER_CONTROL InvCtrl_RTU;
+extern __eds__ __attribute ((eds))INVERTER_CONTROL InvCtrl_TCP;
 
 void Inverter_RTU_Init(uint8_t index);
 void Inverter_TCP_Init(uint8_t index);
+
 void Inverter_RTU_GetData(uint8_t index);
 void Inverter_TCP_GetData(uint8_t index);
+
+void Inverter_RTU_CtrlStrToBuffer(void);
+void Inverter_RTU_ResponseCtrl(void);
+
+void Inverter_TCP_CtrlStrToBuffer(void);
+void Inverter_TCP_ResponseCtrl(void);
+
 #ifdef	__cplusplus
 extern "C" {
 #endif /* __cplusplus */
