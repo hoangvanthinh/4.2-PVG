@@ -53,13 +53,31 @@ enum DEVICE_TYPE
     CONTROL_IO,
     WEATHER_STATION
 };
-extern __eds__ __attribute ((eds))uint16_t RTU_Buffer[MAX_DEVICE][350];
-extern __eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE][350];
+typedef struct
+{
+    uint8_t Control_State;
+    uint8_t Dev_Type;
+    char Modbus_Type;
+}CONTROL_INFOR;
+
+extern __eds__ __attribute ((eds))uint16_t RTU_Buffer[MAX_DEVICE+2][500];
+extern __eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE+2][500];
+
+extern CONTROL_INFOR gCtrlInfor;
+extern DEVICE_CTRL_INFOR gCtrlSetup;
+extern DEVICE_INFOR gCtrlResponse;
 // Comment a function and leverage automatic documentation with slash star star
 void Device_RTU_Init(void);
 void Device_TCP_Init(void);
+
 void Device_RTU_GetData(uint8_t index);
 void Device_TCP_GetData(uint8_t index);
+
+void Device_RTU_CtrlStrToBuffer(void);
+void Device_RTU_ResponseCtrl(void);
+
+void Display_PV_paramenters(void);
+
 /**
     <p><b>Function prototype:</b></p>
   
