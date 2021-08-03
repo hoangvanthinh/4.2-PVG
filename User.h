@@ -55,6 +55,7 @@
 #define MAX_PANEL_RS485 5
 #define MAX_CONTROL_IO_RS485 1
 
+#define MAX_MODULE 12
 #define MAX_FRAME 5
 
 enum MODBUS_TYPE
@@ -84,23 +85,23 @@ typedef struct
 {
     UINT16 HW_Version[4];
     UINT16 SW_Version[4];
-}Device_Git;
+} Device_Git;
 
 extern Device_Git Device_Version;
-typedef struct
-{
-    uint8_t IP[4];
-    uint8_t ID;
-    UINT8 IID;
-}METER;
+//typedef struct
+//{
+//    uint8_t IP[4];
+//    uint8_t ID;
+//    UINT8 IID;
+//} METER;
 
-typedef struct
-{
-    UINT8 IP[4];
-    UINT8 Num_Meter;
-    UINT8 Status;
-    
-}_INTERFACE;
+//typedef struct
+//{
+//    UINT8 IP[4];
+//    UINT8 Num_Meter;
+//    UINT8 Status;
+//    
+//} _INTERFACE;
 
 typedef struct
 {
@@ -111,15 +112,26 @@ typedef struct
     uint8_t Func;
     uint8_t NumFr;
     FRAME Fr[MAX_FRAME];
-    uint8_t EN;
-    
-}DEVICE_INFOR;
+    uint8_t EN;  
+} DEVICE_INFOR;
+
+typedef struct
+{
+    uint8_t UID;
+    uint16_t SID;
+    uint8_t Dev_type;
+    uint8_t Series;
+    uint8_t Func;
+    uint8_t NumFr;
+    FRAME Fr[50];
+    uint8_t EN;  
+} DEVICE_CTRL_INFOR;
 
 typedef struct
 {
     DEVICE_INFOR Dev_Setup;
     UINT8 Status;
-}_DEVICE_RTU;
+} _DEVICE_RTU;
 
 typedef struct
 {
@@ -179,7 +191,7 @@ extern Gateway_setup G42, WEEROM42;
 extern UINT64 *Status_Meter;
 
 void Read_G42_Setup(void);
-void Modbus_RTU_Slave_Add_Setup(void);
+void G42_Add_Setup(void);
 void Check_Save_DataSetup(void);
 void Write_WEEROM42(void);
 void Information_Device(void);
