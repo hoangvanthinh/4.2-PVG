@@ -4,10 +4,12 @@
 
 MODBUS SES_Modbus;
 MODBUS_MASTER_TELEGRAM telegram[MAX_DEVICE*MAX_FRAME];
-__eds__ __attribute ((eds))uint16_t RTU_Buffer[MAX_DEVICE][350];
+MODBUS_MASTER_TELEGRAM control_telegram[2*MAX_FRAME];
+__eds__ __attribute ((eds))uint16_t RTU_Buffer[MAX_DEVICE+2][500];
 
 static uint8_t u8state; //!< machine state
 static uint8_t u8query; //!< pointer to message query
+static uint8_t u8query_ctrl;
 static unsigned long u32wait;
 uint8_t MAX_Query_RTU = 0;
 //=============================================================================
@@ -15,6 +17,7 @@ static void SES_Modbus_setup(uint8_t u8id, char port, uint8_t u8txenpin);
 static void SES_ModbusRTU_Frame_Transaction(void);
 static void SES_Modbus_start(void);
 static void SES_Modbus_setTimeOut( uint16_t u16timeOut); //!<write communication watch-dog timer
+static void SES_ModbusRTU_Setup_CtrlFrame(void); 
 
 static int8_t SES_Modbus_query( MODBUS_MASTER_TELEGRAM telegram ); //!<only for master
 static int8_t SES_Modbus_Master_poll(void); //!<cyclic poll for master
@@ -105,35 +108,56 @@ static uint8_t validateAnswer()
            if (millis() > u32wait) u8state++; // wait state
            break;
          case 1: //===========================================================
-
-           SES_Modbus_query( telegram[u8query] ); // send query (only once)
-           u8state++;
+           if (gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_RTU)
+           {
+                Device_RTU_CtrlStrToBuffer();
+                SES_ModbusRTU_Setup_CtrlFrame();
+                SES_Modbus_query(control_telegram[u8query_ctrl]);
+                u8state++;
+           }
+           else
+           {
+                SES_Modbus_query( telegram[u8query] ); // send query (only once)
+                u8state++;
+           }
 //           u8query++;
 //
 //           if (u8query >= MAX_Query) u8query = 0;
            break;
-         case 2:///////////////////////////////////////////////////////
-
+         case 2://///////////////////////////////////////////////////// 
            SES_Modbus_Master_poll(); // check incoming messages
            if (SES_Modbus_getState() == COM_IDLE) {
                 u8state = 0;
                 u32wait = millis() + SCAN_RATE;
-                if(u8query - N >= (G42.Dev_rtu[telegram[u8query].u8id-1].Dev_Setup.NumFr - 1))
-                { 
-                    Device_RTU_GetData(telegram[u8query].u8id-1);
-                    N++;
-                }
-                u8query++;
-                if (u8query >= MAX_Query_RTU)
+                if(gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_RTU)
                 {
-                    u8query = 0;
-                    N = 0;
+                    u8query_ctrl++;
+                    if(u8query_ctrl >= gCtrlSetup.NumFr + gCtrlResponse.NumFr)
+                    {
+                        Device_RTU_ResponseCtrl();
+                        u8query_ctrl = 0;
+                        gCtrlInfor.Control_State = 0;
+                    }
+                }
+                else
+                {
+                    if(u8query - N >= (G42.Dev_rtu[telegram[u8query].u8id-1].Dev_Setup.NumFr - 1))
+                    { 
+                        Device_RTU_GetData(telegram[u8query].u8id-1);
+                        N++;
+                    }
+                    u8query++;
+                    if (u8query >= MAX_Query_RTU)
+                    {
+                        u8query = 0;
+                        N = 0;
+                    }
                 }
            }
            
 
            break;
-     }
+    }
 
  
     
@@ -158,6 +182,28 @@ static void SES_ModbusRTU_Frame_Transaction(void)
         }
     }
 }
+
+static void SES_ModbusRTU_Setup_CtrlFrame(void)
+{
+    uint8_t i;
+    for (i = 0; i < gCtrlSetup.NumFr; i++)
+    {
+        control_telegram[i].u8id = gCtrlSetup.UID;
+        control_telegram[i].u8fct = gCtrlSetup.Func;
+        control_telegram[i].u16RegAdd = gCtrlSetup.Fr[i].u16RegAdd;
+        control_telegram[i].u16CoilsNo = gCtrlSetup.Fr[i].u16CoilsNo;
+        control_telegram[i].au16reg = gCtrlSetup.Fr[i].pointer + RTU_Buffer[MAX_DEVICE];
+    }
+    for (i = 0; i < gCtrlResponse.NumFr; i++)
+    {
+        control_telegram[i+MAX_FRAME].u8id = gCtrlResponse.UID;
+        control_telegram[i+MAX_FRAME].u8fct = gCtrlResponse.Func;
+        control_telegram[i+MAX_FRAME].u16RegAdd = gCtrlResponse.Fr[i].u16RegAdd;
+        control_telegram[i+MAX_FRAME].u16CoilsNo = gCtrlResponse.Fr[i].u16CoilsNo;
+        control_telegram[i+MAX_FRAME].au16reg = gCtrlResponse.Fr[i].pointer + RTU_Buffer[MAX_DEVICE+1];
+    }
+}
+
 void SES_ModbusRTU_Master_Init(void)
 {
     uint8_t i;
