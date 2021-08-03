@@ -85,10 +85,12 @@ void Read_G42_Setup(void) {
         
         G42.Dev_rtu[0].Dev_Setup.Dev_type = INVERTER;
         G42.Dev_rtu[0].Dev_Setup.Series = SUN6KG03;
+        G42.Dev_rtu[0].Dev_Setup.SID = 1;
         G42.Dev_rtu[0].Dev_Setup.UID = 1;
 
         G42.Dev_tcp[0].Dev_Setup.Dev_type = WEATHER_STATION;
         G42.Dev_tcp[0].Dev_Setup.Series = 0;
+        G42.Dev_tcp[0].Dev_Setup.SID = 3;
         G42.Dev_tcp[0].IP[0] = 192;
         G42.Dev_tcp[0].IP[1] = 168;
         G42.Dev_tcp[0].IP[2] = 0;
@@ -96,6 +98,7 @@ void Read_G42_Setup(void) {
         
         G42.Dev_tcp[1].Dev_Setup.Dev_type = INVERTER;
         G42.Dev_tcp[1].Dev_Setup.Series = SG110CX;
+        G42.Dev_tcp[1].Dev_Setup.SID = 4;
         G42.Dev_tcp[1].IP[0] = 192;
         G42.Dev_tcp[1].IP[1] = 168;
         G42.Dev_tcp[1].IP[2] = 0;
@@ -104,11 +107,11 @@ void Read_G42_Setup(void) {
     //}
     //EEPROM_WP_SetHigh();
 
-    Modbus_RTU_Slave_Add_Setup();
+    G42_Add_Setup();
 
 }
 
-void Modbus_RTU_Slave_Add_Setup(void) {
+void G42_Add_Setup(void) {
     uint8_t i;
     
     SES_42.SETUP_REGS[0] = SD_GATEWAY_L;
@@ -157,19 +160,21 @@ void Modbus_RTU_Slave_Add_Setup(void) {
 
     for(i=0; i<SES_42.SETUP_REGS[109]; i++)
     {
-        SES_42.SETUP_REGS[111+3*i] = G42.Dev_rtu[i].Dev_Setup.UID;
-        SES_42.SETUP_REGS[112+3*i] = G42.Dev_rtu[i].Dev_Setup.Dev_type;
-        SES_42.SETUP_REGS[113+3*i] = G42.Dev_rtu[i].Dev_Setup.Series;
+        SES_42.SETUP_REGS[111+4*i] = G42.Dev_rtu[i].Dev_Setup.UID;
+        SES_42.SETUP_REGS[112+4*i] = G42.Dev_rtu[i].Dev_Setup.SID;
+        SES_42.SETUP_REGS[113+4*i] = G42.Dev_rtu[i].Dev_Setup.Dev_type;
+        SES_42.SETUP_REGS[114+4*i] = G42.Dev_rtu[i].Dev_Setup.Series;
     }
     
     for(i=0; i<SES_42.SETUP_REGS[110]; i++)
     {
-        SES_42.SETUP_REGS[171+6*i] = G42.Dev_tcp[i].IP[0];
-        SES_42.SETUP_REGS[172+6*i] = G42.Dev_tcp[i].IP[1];
-        SES_42.SETUP_REGS[173+6*i] = G42.Dev_tcp[i].IP[2];
-        SES_42.SETUP_REGS[174+6*i] = G42.Dev_tcp[i].IP[3];
-        SES_42.SETUP_REGS[175+6*i] = G42.Dev_rtu[i].Dev_Setup.Dev_type;
-        SES_42.SETUP_REGS[176+6*i] = G42.Dev_rtu[i].Dev_Setup.Series;
+        SES_42.SETUP_REGS[171+7*i] = G42.Dev_tcp[i].IP[0];
+        SES_42.SETUP_REGS[172+7*i] = G42.Dev_tcp[i].IP[1];
+        SES_42.SETUP_REGS[173+7*i] = G42.Dev_tcp[i].IP[2];
+        SES_42.SETUP_REGS[174+7*i] = G42.Dev_tcp[i].IP[3];
+        SES_42.SETUP_REGS[175+7*i] = G42.Dev_tcp[i].Dev_Setup.SID;
+        SES_42.SETUP_REGS[176+7*i] = G42.Dev_rtu[i].Dev_Setup.Dev_type;
+        SES_42.SETUP_REGS[177+7*i] = G42.Dev_rtu[i].Dev_Setup.Series;
     }
 }
 
@@ -218,17 +223,19 @@ void Check_Save_DataSetup(void) {
         uint8_t i;
         for (i = 0; i < WEEROM42.Num_Dev_rtu; i++)
         {
-            WEEROM42.Dev_rtu[i].Dev_Setup.Dev_type = SES_42.SETUP_REGS[112+3*i];
-            WEEROM42.Dev_rtu[i].Dev_Setup.UID = SES_42.SETUP_REGS[111 + 3*i];
-            WEEROM42.Dev_rtu[i].Dev_Setup.Series = SES_42.SETUP_REGS[113 +3*i];
+            WEEROM42.Dev_rtu[i].Dev_Setup.Dev_type = SES_42.SETUP_REGS[113+4*i];
+            WEEROM42.Dev_rtu[i].Dev_Setup.UID = SES_42.SETUP_REGS[111 + 4*i];
+            WEEROM42.Dev_rtu[i].Dev_Setup.SID = SES_42.SETUP_REGS[112 + 4*i];
+            WEEROM42.Dev_rtu[i].Dev_Setup.Series = SES_42.SETUP_REGS[114 +4*i];
         }
         for (i = 0; i < WEEROM42.Num_Dev_tcp; i++) {
-            WEEROM42.Dev_tcp[i].IP[0] = SES_42.SETUP_REGS[171 + 6*i];
-            WEEROM42.Dev_tcp[i].IP[1] = SES_42.SETUP_REGS[172 + 6*i];
-            WEEROM42.Dev_tcp[i].IP[2] = SES_42.SETUP_REGS[173 + 6*i];
-            WEEROM42.Dev_tcp[i].IP[3] = SES_42.SETUP_REGS[174 + 6*i];
-            WEEROM42.Dev_tcp[i].Dev_Setup.Dev_type = SES_42.SETUP_REGS[175 + 6*i];
-            WEEROM42.Dev_tcp[i].Dev_Setup.Series = SES_42.SETUP_REGS[176 + 6*i];
+            WEEROM42.Dev_tcp[i].IP[0] = SES_42.SETUP_REGS[171 + 7*i];
+            WEEROM42.Dev_tcp[i].IP[1] = SES_42.SETUP_REGS[172 + 7*i];
+            WEEROM42.Dev_tcp[i].IP[2] = SES_42.SETUP_REGS[173 + 7*i];
+            WEEROM42.Dev_tcp[i].IP[3] = SES_42.SETUP_REGS[174 + 7*i];
+            WEEROM42.Dev_tcp[i].Dev_Setup.SID = SES_42.SETUP_REGS[175 + 7*i];
+            WEEROM42.Dev_tcp[i].Dev_Setup.Dev_type = SES_42.SETUP_REGS[176 + 7*i];
+            WEEROM42.Dev_tcp[i].Dev_Setup.Series = SES_42.SETUP_REGS[177 + 7*i];
         }
         Write_WEEROM42();
         SES_42.Coils.bits.b0 = 0;
@@ -280,19 +287,22 @@ void Write_WEEROM42(void) {
     static int i = 0;
 
     for (i = 0; i < WEEROM42.Num_Dev_rtu; i++) {
-        EEPROM3_WriteOneByte(ADD_START_SETUP + 111 + 3 * i, WEEROM42.Dev_rtu[i].Dev_Setup.UID);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 111 + 4 * i, WEEROM42.Dev_rtu[i].Dev_Setup.UID);
         __delay_ms(10);
-        EEPROM3_WriteOneByte(ADD_START_SETUP + 112 + 3 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Dev_type);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 112 + 4 * i, WEEROM42.Dev_rtu[i].Dev_Setup.SID);
         __delay_ms(10);
-        EEPROM3_WriteOneByte(ADD_START_SETUP + 113 + 3 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Series);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 113 + 4 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Dev_type);
+        __delay_ms(10);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 114 + 4 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Series);
         __delay_ms(10);
     }
     
     for (i = 0; i < WEEROM42.Num_Dev_tcp; i++) {
-        EEPROM3_WriteBlock(ADD_START_SETUP + 171 + 6 * i, WEEROM42.Dev_tcp[i].IP, 4);
+        EEPROM3_WriteBlock(ADD_START_SETUP + 171 + 7 * i, WEEROM42.Dev_tcp[i].IP, 4);
         __delay_ms(10);
-        EEPROM3_WriteOneByte(ADD_START_SETUP + 175 + 6 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Dev_type);
-        EEPROM3_WriteOneByte(ADD_START_SETUP + 176 + 6 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Series);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 175 + 7 * i, WEEROM42.Dev_rtu[i].Dev_Setup.SID);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 176 + 7 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Dev_type);
+        EEPROM3_WriteOneByte(ADD_START_SETUP + 177 + 7 * i, WEEROM42.Dev_rtu[i].Dev_Setup.Series);
         __delay_ms(10);
     }
     __delay_ms(100);
