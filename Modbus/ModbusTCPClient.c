@@ -60,7 +60,7 @@ static uint16_t C_u16MBProtocolID                         = 0;       ///< Consta
 static MODBUS SES_Modbus;
 
 MODBUS_CLIENT_TELEGRAM Client_telegram[MAX_DEVICE*MAX_FRAME];  //50x3x2
-__eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE][350];
+__eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE+2][500];
 
 // static uint16_t   Data42L[MAX_NUM_METER][350];
 
@@ -204,7 +204,7 @@ static int8_t SES_Modbus_query( MODBUS_CLIENT_TELEGRAM telegram )
     packetLength =SES_Modbus_Size;
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = telegram.INFOR.u8id;
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = telegram.INFOR.u8fct;
-          
+    
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = highByte(telegram.INFOR.Frame.u16RegAdd);
     SES_Modbus.au8Buffer[SES_Modbus_Size++] = lowByte(telegram.INFOR.Frame.u16RegAdd);
     
