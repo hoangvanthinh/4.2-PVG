@@ -65,16 +65,16 @@ extern __eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE+2][500];
 
 extern CONTROL_INFOR gCtrlInfor;
 extern DEVICE_CTRL_INFOR gCtrlSetup;
-extern DEVICE_INFOR gCtrlResponse;
+extern DEVICE_CTRL_INFOR gCtrlResponse;
 // Comment a function and leverage automatic documentation with slash star star
 void Device_RTU_Init(void);
 void Device_TCP_Init(void);
 
-void Device_RTU_GetData(uint8_t index);
-void Device_TCP_GetData(uint8_t index);
+uint8_t Device_GetData(uint8_t index,char type);
 
-void Device_RTU_CtrlStrToBuffer(void);
-void Device_RTU_ResponseCtrl(void);
+void Device_CtrlStrToBuffer(void);
+
+void Device_ResponseCtrl(void);
 
 void Display_PV_paramenters(void);
 
