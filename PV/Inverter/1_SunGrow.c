@@ -12,21 +12,29 @@ void SG110CX_Initialization(DEVICE_INFOR *Inv)
     (*Inv).Fr[1].pointer = 75;      
 }
 
-void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
+uint8_t SG110CX_CtrlSetup(char type)
+{
+    return 1;
+}
+
+uint8_t SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
 {
     
     __eds__ INVERTER_DATA *inv_data;
     __eds__ uint16_t *Buffer;
     if(type == MODBUS_RTU)
     {
-        inv_data = &(InvData_RTU[inv_index]);
         Buffer = RTU_Buffer[index];
     }
     else if(type == MODBUS_TCP)
     {
-        inv_data = &(InvData_TCP[inv_index]);
         Buffer = TCP_Buffer[index];
     }
+    else
+    {
+        return 0;
+    }
+    inv_data = &(InvData[inv_index]);
     if (type == MODBUS_RTU || type == MODBUS_TCP)
     {
         //AC Data
@@ -64,6 +72,46 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
         (*inv_data).AC.Hz_SF = -1;
 
         //DC data
+        (*inv_data).DC.N = 9;
+        
+        (*inv_data).DC.Mppt_module[0].ID = 1;
+        (*inv_data).DC.Mppt_module[0].DCV = Buffer[10];
+        (*inv_data).DC.Mppt_module[0].DCA = Buffer[11];
+        
+        (*inv_data).DC.Mppt_module[1].ID = 2;
+        (*inv_data).DC.Mppt_module[1].DCV = Buffer[12];
+        (*inv_data).DC.Mppt_module[1].DCA = Buffer[13];
+        
+        (*inv_data).DC.Mppt_module[2].ID = 3;
+        (*inv_data).DC.Mppt_module[2].DCV = Buffer[14];
+        (*inv_data).DC.Mppt_module[2].DCA = Buffer[15];
+        
+        (*inv_data).DC.Mppt_module[3].ID = 4;
+        (*inv_data).DC.Mppt_module[3].DCV = Buffer[114];
+        (*inv_data).DC.Mppt_module[3].DCA = Buffer[115];
+       
+        (*inv_data).DC.Mppt_module[4].ID = 5;
+        (*inv_data).DC.Mppt_module[4].DCV = Buffer[116];
+        (*inv_data).DC.Mppt_module[4].DCA = Buffer[117];
+        
+        (*inv_data).DC.Mppt_module[5].ID = 6;
+        (*inv_data).DC.Mppt_module[5].DCV = Buffer[118];
+        (*inv_data).DC.Mppt_module[5].DCA = Buffer[119];
+        
+        (*inv_data).DC.Mppt_module[6].ID = 7;
+        (*inv_data).DC.Mppt_module[6].DCV = Buffer[120];
+        (*inv_data).DC.Mppt_module[6].DCA = Buffer[121];
+        
+        (*inv_data).DC.Mppt_module[7].ID = 8;
+        (*inv_data).DC.Mppt_module[7].DCV = Buffer[122];
+        (*inv_data).DC.Mppt_module[7].DCA = Buffer[123];
+        
+        (*inv_data).DC.Mppt_module[8].ID = 9;
+        (*inv_data).DC.Mppt_module[8].DCV = Buffer[129];
+        (*inv_data).DC.Mppt_module[8].DCA = Buffer[130];
+        
+        (*inv_data).DC.DCA_SF = -1;
+        (*inv_data).DC.DCV_SF = -1;
         (*inv_data).DC.P_DC = (INT16)((convert16to32(Buffer[17],Buffer[16]))/1000);
         (*inv_data).DC.DCW_SF = 0;
         
@@ -150,4 +198,10 @@ void SG110CX_GetData(uint8_t index, uint8_t inv_index, char type)
         (*inv_data).T.T_Cabinet = Buffer[7];
         (*inv_data).T.Tmp_SF = -1;
     }
+    return 1;
+}
+
+uint8_t SG110CX_ResponseCtrl(char type)
+{
+    return 1;
 }
