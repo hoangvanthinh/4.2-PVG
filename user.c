@@ -70,14 +70,10 @@ void Read_G42_Setup(void) {
         G42.LOCAL_SERVER.IP[3] = 1;
         G42.LOCAL_SERVER.PORT.val16 = 502;
         
-        G42.Num_inverter_rtu = 1;
-        G42.Num_inverter_tcp = 1;
-        G42.Num_panel_rtu = 0;
-        G42.Num_panel_tcp = 0;
-        G42.Num_str_combiner_rtu = 0;
-        G42.Num_str_combiner_tcp = 0;
-        G42.Num_control_io_rtu = 0;
-        G42.Num_control_io_tcp = 0;
+        G42.Num_inverter = 2;
+        G42.Num_panel = 0;
+        G42.Num_str_combiner = 0;
+        G42.Num_control_io= 0;
         G42.Num_weather = 1;
         
         G42.Num_Dev_rtu = 1;
@@ -106,7 +102,8 @@ void Read_G42_Setup(void) {
         
     //}
     //EEPROM_WP_SetHigh();
-
+    // Setup control state
+    gCtrlInfor.Control_State = 0;
     G42_Add_Setup();
 
 }
@@ -146,14 +143,10 @@ void G42_Add_Setup(void) {
     SES_42.SETUP_REGS[35] = G42.LOCAL_SERVER.IP[3];
     SES_42.SETUP_REGS[36] = G42.LOCAL_SERVER.PORT.val16;
     //======================================================================
-    SES_42.SETUP_REGS[100] = G42.Num_inverter_rtu;
-    SES_42.SETUP_REGS[101] = G42.Num_inverter_tcp;
-    SES_42.SETUP_REGS[102] = G42.Num_panel_rtu;
-    SES_42.SETUP_REGS[103] = G42.Num_panel_tcp;
-    SES_42.SETUP_REGS[104] = G42.Num_str_combiner_rtu;
-    SES_42.SETUP_REGS[105] = G42.Num_str_combiner_tcp;
-    SES_42.SETUP_REGS[106] = G42.Num_control_io_rtu;
-    SES_42.SETUP_REGS[100] = G42.Num_control_io_tcp;//Control IO
+    SES_42.SETUP_REGS[100] = G42.Num_inverter;
+    SES_42.SETUP_REGS[102] = G42.Num_panel;
+    SES_42.SETUP_REGS[104] = G42.Num_str_combiner;
+    SES_42.SETUP_REGS[106] = G42.Num_control_io;
     SES_42.SETUP_REGS[108] = G42.Num_weather;
     SES_42.SETUP_REGS[109] = G42.Num_Dev_rtu;
     SES_42.SETUP_REGS[110] = G42.Num_Dev_tcp;
@@ -208,14 +201,10 @@ void Check_Save_DataSetup(void) {
         WEEROM42.LOCAL_SERVER.IP[3] = SES_42.SETUP_REGS[35];        
         WEEROM42.LOCAL_SERVER.PORT.val16 = SES_42.SETUP_REGS[36];   
         
-        WEEROM42.Num_inverter_rtu = SES_42.SETUP_REGS[100];
-        WEEROM42.Num_inverter_tcp = SES_42.SETUP_REGS[101];
-        WEEROM42.Num_panel_rtu = SES_42.SETUP_REGS[102];
-        WEEROM42.Num_panel_tcp = SES_42.SETUP_REGS[103];
-        WEEROM42.Num_str_combiner_rtu = SES_42.SETUP_REGS[104];
-        WEEROM42.Num_str_combiner_tcp = SES_42.SETUP_REGS[105];
-        WEEROM42.Num_control_io_rtu = SES_42.SETUP_REGS[106];
-        WEEROM42.Num_control_io_tcp = SES_42.SETUP_REGS[107];
+        WEEROM42.Num_inverter = SES_42.SETUP_REGS[100];
+        WEEROM42.Num_panel = SES_42.SETUP_REGS[102];
+        WEEROM42.Num_str_combiner = SES_42.SETUP_REGS[104];
+        WEEROM42.Num_control_io = SES_42.SETUP_REGS[106];
         WEEROM42.Num_weather = SES_42.SETUP_REGS[108];
         
         WEEROM42.Num_Dev_rtu = SES_42.SETUP_REGS[109];
@@ -262,21 +251,13 @@ void Write_WEEROM42(void) {
     EEPROM3_WriteBlock(ADD_START_SETUP + 21, WEEROM42.LOCAL_SERVER.PORT.val, 2);
     __delay_ms(10);
     
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 100, WEEROM42.Num_inverter_rtu);
+    EEPROM3_WriteOneByte(ADD_START_SETUP + 100, WEEROM42.Num_inverter);
     __delay_ms(10);
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 101, WEEROM42.Num_inverter_tcp);
-    __delay_ms(10);
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 102, WEEROM42.Num_panel_rtu);
+    EEPROM3_WriteOneByte(ADD_START_SETUP + 102, WEEROM42.Num_panel);
     __delay_ms(10);    
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 103, WEEROM42.Num_panel_tcp);
+    EEPROM3_WriteOneByte(ADD_START_SETUP + 104, WEEROM42.Num_str_combiner);
     __delay_ms(10);
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 104, WEEROM42.Num_str_combiner_rtu);
-    __delay_ms(10);
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 105, WEEROM42.Num_str_combiner_tcp);
-    __delay_ms(10);
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 106, WEEROM42.Num_control_io_rtu);
-    __delay_ms(10);
-    EEPROM3_WriteOneByte(ADD_START_SETUP + 107, WEEROM42.Num_control_io_tcp);
+    EEPROM3_WriteOneByte(ADD_START_SETUP + 106, WEEROM42.Num_control_io);
     __delay_ms(10);
     EEPROM3_WriteOneByte(ADD_START_SETUP + 108, WEEROM42.Num_weather);
     __delay_ms(10);
