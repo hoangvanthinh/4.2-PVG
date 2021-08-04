@@ -38,6 +38,10 @@
 
 typedef struct
 {
+    UINT16 SID;
+    UINT8  Series;
+    char Modbus_Type;
+    
     UINT16 WIND_SPEED;
     UINT16 WIND_DIRECTION;
     UINT16 IRRADIATION;
@@ -47,10 +51,10 @@ typedef struct
     UINT16 RAIN;
 } WEATHER_DATA;
 
-extern __eds__ __attribute ((eds))WEATHER_DATA Weather[MAX_WEATHER_TCP];
+extern __eds__ __attribute ((eds))WEATHER_DATA Weather[MAX_WEATHER];
 
 void Weather_station_Init(DEVICE_INFOR *Weather_Setup);
-void Weather_TCP_GetData(uint8_t index);
+void Weather_GetData(uint8_t index);
 //void Getdata_Weather(uint8_t index);
 // TODO Insert appropriate #include <>
 
