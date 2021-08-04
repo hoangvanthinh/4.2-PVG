@@ -99,7 +99,7 @@ static uint8_t validateAnswer()
 
     return 0; // OK, no exception code thrown
 }
-  void SES_ModbusRTU_Master_Process(void)
+void SES_ModbusRTU_Master_Process(void)
 {
     static uint8_t N=0;
     switch( u8state ) 
@@ -143,7 +143,7 @@ static uint8_t validateAnswer()
                 {
                     if(u8query - N >= (G42.Dev_rtu[telegram[u8query].u8id-1].Dev_Setup.NumFr - 1))
                     { 
-                        Device_GetData(telegram[u8query].u8id-1);
+                        Device_GetData(telegram[u8query].u8id-1,MODBUS_RTU);
                         N++;
                     }
                     u8query++;
