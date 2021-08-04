@@ -43,24 +43,14 @@
 #define MAX_INVERTER 5
 #define MAX_STRCOMBINER 5
 #define MAX_PANEL 5
-
-#define MAX_INVERTER_TCP 5
-#define MAX_STRCOMBINER_TCP 5
-#define MAX_PANEL_TCP 5
-#define MAX_WEATHER_TCP 1
-#define MAX_CONTROL_IO_TCP 1
-
-#define MAX_INVERTER_RS485 5
-#define MAX_STRCOMBINER_RS485 5
-#define MAX_PANEL_RS485 5
-#define MAX_CONTROL_IO_RS485 1
+#define MAX_WEATHER 1
 
 #define MAX_MODULE 12
 #define MAX_FRAME 5
 
 enum MODBUS_TYPE
 {
-    MODBUS_RTU = 0,
+    MODBUS_RTU = 1,
     MODBUS_TCP
 };
 
@@ -119,6 +109,7 @@ typedef struct
 {
     uint8_t UID;
     uint16_t SID;
+    uint32_t IP;
     uint8_t Dev_type;
     uint8_t Series;
     uint8_t Func;
@@ -167,14 +158,10 @@ typedef struct
     SERVER_LOCAL LOCAL_SERVER;
     SERVER_CLOUD CLOUD_SERVER;
     
-    UINT8 Num_inverter_rtu;
-    UINT8 Num_inverter_tcp;
-    UINT8 Num_panel_rtu;
-    UINT8 Num_panel_tcp;
-    UINT8 Num_str_combiner_rtu;
-    UINT8 Num_str_combiner_tcp;
-    UINT8 Num_control_io_rtu;
-    UINT8 Num_control_io_tcp;
+    UINT8 Num_inverter;
+    UINT8 Num_panel;
+    UINT8 Num_str_combiner;
+    UINT8 Num_control_io;
     UINT8 Num_weather;
     
     UINT8 Num_Dev_rtu;
