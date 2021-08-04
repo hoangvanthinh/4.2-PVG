@@ -110,7 +110,7 @@ static uint8_t validateAnswer()
          case 1: //===========================================================
            if (gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_RTU)
            {
-                Device_RTU_CtrlStrToBuffer();
+                Device_CtrlStrToBuffer();
                 SES_ModbusRTU_Setup_CtrlFrame();
                 SES_Modbus_query(control_telegram[u8query_ctrl]);
                 u8state++;
@@ -134,7 +134,7 @@ static uint8_t validateAnswer()
                     u8query_ctrl++;
                     if(u8query_ctrl >= gCtrlSetup.NumFr + gCtrlResponse.NumFr)
                     {
-                        Device_RTU_ResponseCtrl();
+                        Device_ResponseCtrl();
                         u8query_ctrl = 0;
                         gCtrlInfor.Control_State = 0;
                     }
@@ -143,7 +143,7 @@ static uint8_t validateAnswer()
                 {
                     if(u8query - N >= (G42.Dev_rtu[telegram[u8query].u8id-1].Dev_Setup.NumFr - 1))
                     { 
-                        Device_RTU_GetData(telegram[u8query].u8id-1);
+                        Device_GetData(telegram[u8query].u8id-1);
                         N++;
                     }
                     u8query++;
