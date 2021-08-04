@@ -34,6 +34,8 @@
 #include <xc.h> // include processor files - each processor file is guarded. 
 #include "../../SES.h"
 #include "1_SunGrow.h"
+#include "2_Deye.h"
+#include "3_Sma.h"
 // TODO Insert appropriate #include <>
 
 // TODO Insert C++ class definitions if appropriate
@@ -190,8 +192,8 @@ typedef struct
 typedef struct
 {
     UINT16 SID;
-    UINT8  Type_Dev;
     UINT8  Series;
+    char Modbus_Type;
     UINT16 Operating_State;
     UINT16 Event;
     UINT16 PV_connect;
@@ -258,6 +260,8 @@ typedef struct
 {
     UINT16 SID;
     UINT8 Series;
+    char Modbus_Type;
+    
     UINT16  Connection_Control;
     VOLTAGE_CONTROL V;
     P_CONTROL P;
@@ -267,22 +271,16 @@ typedef struct
     PF_CONTRL PF;
 }INVERTER_CONTROL;
 
-extern __eds__ __attribute ((eds))INVERTER_DATA InvData_RTU[MAX_INVERTER_RS485];
-extern __eds__ __attribute ((eds))INVERTER_DATA InvData_TCP[MAX_INVERTER_TCP];
-extern __eds__ __attribute ((eds))INVERTER_CONTROL InvCtrl_RTU;
-extern __eds__ __attribute ((eds))INVERTER_CONTROL InvCtrl_TCP;
+extern __eds__ __attribute ((eds))INVERTER_DATA InvData[MAX_INVERTER];
+extern __eds__ __attribute ((eds))INVERTER_CONTROL InvCtrl;
 
 void Inverter_RTU_Init(uint8_t index);
 void Inverter_TCP_Init(uint8_t index);
 
-void Inverter_RTU_GetData(uint8_t index);
-void Inverter_TCP_GetData(uint8_t index);
+uint8_t Inverter_GetData(uint8_t index, char type);
 
-void Inverter_RTU_CtrlStrToBuffer(void);
-void Inverter_RTU_ResponseCtrl(void);
-
-void Inverter_TCP_CtrlStrToBuffer(void);
-void Inverter_TCP_ResponseCtrl(void);
+void Inverter_CtrlStrToBuffer(char Modbus_type);
+void Inverter_ResponseCtrl(char Modbus_type);
 
 #ifdef	__cplusplus
 extern "C" {
