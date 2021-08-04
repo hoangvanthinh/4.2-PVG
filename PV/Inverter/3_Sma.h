@@ -12,9 +12,9 @@
 #include "0_Inverter.h"
 
 void STP50_Initialization(DEVICE_INFOR *Inv);
-void STP50_GetData(uint8_t index, uint8_t inv_index, char type);
+uint8_t STP50_GetData(uint8_t index, uint8_t inv_index, char type);
 uint8_t STP50_CtrlSetup(char type);
-uint8_t STP50_RTU_ResponseCtrl(char type);
+uint8_t STP50_ResponseCtrl(char type);
 
 #ifdef	__cplusplus
 extern "C" {
