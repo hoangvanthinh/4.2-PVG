@@ -42,6 +42,8 @@ static MODBUS_CLIENT_STATE ModbusClientState = (MODBUS_CLIENT_STATE)MBCS_HOME;
 static uint16_t Frame_len;
 static uint32_t timeout;
 static UINT16 query = 0;
+static UINT16 ctrl_query = 0;
+static uint8_t CS = 0;
 //==============================================================================
 //static uint8_t C_status_Modbus = 0;
 //static uint8_t C_u8state;
@@ -60,6 +62,8 @@ static uint16_t C_u16MBProtocolID                         = 0;       ///< Consta
 static MODBUS SES_Modbus;
 
 MODBUS_CLIENT_TELEGRAM Client_telegram[MAX_DEVICE*MAX_FRAME];  //50x3x2
+MODBUS_CLIENT_TELEGRAM Ctrl_client_telegame[2*MAX_FRAME];
+
 __eds__ __attribute ((eds))uint16_t TCP_Buffer[MAX_DEVICE+2][500];
 
 // static uint16_t   Data42L[MAX_NUM_METER][350];
@@ -87,6 +91,8 @@ static  uint8_t SerializedMACAddress[6] = {MY_DEFAULT_MAC_BYTE1, MY_DEFAULT_MAC_
 
 static void get_FC3(void);
 static uint8_t SES_Modbus_validateAnswer(void);
+static void SES_Modbus_TCPIP_Frame_Setup(void);
+static void SES_Mosbus_TCPIP_Frame_Control(void);
 
 static void InitAppConfig(void)
 {
@@ -162,9 +168,36 @@ static void SES_Modbus_TCPIP_Frame_Setup(void)
             k++;
         }
     }
-    //Error IP here
-    
+    //Error IP here   
 }
+
+static void SES_Mosbus_TCPIP_Frame_Control(void)
+{
+    uint8_t i;
+    for (i = 0; i < gCtrlSetup.NumFr; i++)
+    {
+        Ctrl_client_telegame[i].INFOR.IP.val = gCtrlResponse.IP;
+        Ctrl_client_telegame[i].INFOR.PORT = MODBUS_PORT;
+        Ctrl_client_telegame[i].INFOR.u8id = gCtrlResponse.UID;
+        Ctrl_client_telegame[i].INFOR.u8fct = gCtrlResponse.Func;
+        Ctrl_client_telegame[i].INFOR.Frame.u16CoilsNo = gCtrlResponse.Fr[i].u16CoilsNo;
+        Ctrl_client_telegame[i].INFOR.Frame.u16RegAdd = gCtrlResponse.Fr[i].u16RegAdd;
+        Ctrl_client_telegame[i].INFOR.Frame.pointer = gCtrlResponse.Fr[i].pointer;
+        Ctrl_client_telegame[i].au16reg = TCP_Buffer[MAX_DEVICE]+Ctrl_client_telegame[i].INFOR.Frame.pointer;  
+    }
+    for (i = 0; i < gCtrlResponse.NumFr; i++)
+    {
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.IP.val = gCtrlResponse.IP;
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.PORT = MODBUS_PORT;
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.u8id = gCtrlResponse.UID;
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.u8fct = gCtrlResponse.Func;
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.Frame.u16CoilsNo = gCtrlResponse.Fr[i].u16CoilsNo;
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.Frame.u16RegAdd = gCtrlResponse.Fr[i].u16RegAdd;
+        Ctrl_client_telegame[i+MAX_FRAME].INFOR.Frame.pointer = gCtrlResponse.Fr[i].pointer;
+        Ctrl_client_telegame[i+MAX_FRAME].au16reg = TCP_Buffer[MAX_DEVICE+1]+Ctrl_client_telegame[i+MAX_FRAME].INFOR.Frame.pointer;  
+    }
+}
+
 void SES_ModbusTCP_Client_Init(void)
 {
         
@@ -267,19 +300,34 @@ static void SES_ModbusReq(void)
 {
 
     static uint8_t num_query;
+
     if(ModbusClientState == MBCS_DISCONNECT)
     {
-        if(query - num_query >= (G42.Dev_tcp[Client_telegram[query].INFOR.u8id-1].Dev_Setup.NumFr - 1))
+        if(gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_RTU)
         {
-            Device_TCP_GetData(Client_telegram[query].INFOR.u8id - 1);
-            num_query++;
+            ctrl_query++;
+            if(ctrl_query >= gCtrlSetup.NumFr + gCtrlResponse.NumFr)
+            {
+                Device_ResponseCtrl();
+                ctrl_query = 0;
+                CS = 0;
+                gCtrlInfor.Control_State = 0;
+            }
         }
-        query++;
-        if(query >= MAX_Query_TCP)
+        else
         {
-            query = 0;
-            num_query = 0;
-        }    
+            if(query - num_query >= (G42.Dev_tcp[Client_telegram[query].INFOR.u8id-1].Dev_Setup.NumFr - 1))
+            {
+                Device_GetData(Client_telegram[query].INFOR.u8id - 1, MODBUS_TCP);
+                num_query++;
+            }
+            query++;
+            if(query >= MAX_Query_TCP)
+            {
+                query = 0;
+                num_query = 0;
+            }
+        }
         
         //query = 1;
     }
@@ -333,8 +381,7 @@ static void get_FC3(void)
     {
         SES_Modbus.au16regs[ i ] = word(
                             SES_Modbus.au8Buffer[ 2*i + 9],
-                            SES_Modbus.au8Buffer[ 2*i + 10 ]);
-      
+                            SES_Modbus.au8Buffer[ 2*i + 10 ]);      
     }
 }
 
@@ -355,6 +402,7 @@ static MODBUS_CLIENT_STATE ModbusRequestTask(void)
 	static unsigned char received = 0;
 
 	static BYTE error_flag = 0;
+
 
 	if( !bModbusClientInitialised )
 	{
@@ -377,8 +425,20 @@ static MODBUS_CLIENT_STATE ModbusRequestTask(void)
 				static char invalid_counts = 0;
 			
 				// Connect a socket to the remote TCP server
-
-				MySocket = TCPOpen(Client_telegram[query].INFOR.IP.val, TCP_OPEN_IP_ADDRESS, Client_telegram[query].INFOR.PORT, TCP_PURPOSE_MODBUS_CLIENT);
+                if(gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_TCP)
+                {
+                    if (CS == 0)
+                    {
+                        Device_CtrlStrToBuffer();
+                        SES_Mosbus_TCPIP_Frame_Control();
+                        CS = 1;
+                    }
+                    MySocket = TCPOpen(Ctrl_client_telegame[ctrl_query].INFOR.IP.val, TCP_OPEN_IP_ADDRESS, Ctrl_client_telegame[ctrl_query].INFOR.PORT, TCP_PURPOSE_MODBUS_CLIENT);
+                }
+                else
+                {
+                    MySocket = TCPOpen(Client_telegram[query].INFOR.IP.val, TCP_OPEN_IP_ADDRESS, Client_telegram[query].INFOR.PORT, TCP_PURPOSE_MODBUS_CLIENT);
+                }
 				if(MySocket == INVALID_SOCKET)
 				{
                     //printf("INVALID_SOCKET!!!\r\n");
@@ -438,8 +498,14 @@ static MODBUS_CLIENT_STATE ModbusRequestTask(void)
 //                            Client_telegram[0].u8id = 1;
 //                        Client_telegram[0].au16reg = Data42L[Client_telegram[0].u8id-1];
 //                    }
-                    
-                    SES_Modbus_query(Client_telegram[query]);
+                    if(gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_TCP)
+                    {
+                        SES_Modbus_query(Ctrl_client_telegame[ctrl_query]);
+                    }
+                    else
+                    {
+                        SES_Modbus_query(Client_telegram[query]);
+                    }
                        
                     w = TCPPutArray(MySocket, SES_Modbus.au8Buffer, Frame_len);
 			
