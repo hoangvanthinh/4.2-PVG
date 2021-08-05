@@ -303,7 +303,7 @@ static void SES_ModbusReq(void)
 
     if(ModbusClientState == MBCS_DISCONNECT)
     {
-        if(gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_RTU)
+        if(gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_TCP)
         {
             ctrl_query++;
             if(ctrl_query >= gCtrlSetup.NumFr + gCtrlResponse.NumFr)
