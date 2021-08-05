@@ -101,7 +101,7 @@ static uint8_t validateAnswer()
 }
 void SES_ModbusRTU_Master_Process(void)
 {
-    static uint8_t N=0;
+    static uint8_t N = 0, CS = 0;
     switch( u8state ) 
      {
          case 0: 
@@ -110,8 +110,12 @@ void SES_ModbusRTU_Master_Process(void)
          case 1: //===========================================================
            if (gCtrlInfor.Control_State == 1 && gCtrlInfor.Modbus_Type == MODBUS_RTU)
            {
-                Device_CtrlStrToBuffer();
-                SES_ModbusRTU_Setup_CtrlFrame();
+               if(CS == 0)
+               {
+                    Device_CtrlStrToBuffer();
+                    SES_ModbusRTU_Setup_CtrlFrame();
+                    CS = 1;
+               }
                 SES_Modbus_query(control_telegram[u8query_ctrl]);
                 u8state++;
            }
@@ -136,6 +140,7 @@ void SES_ModbusRTU_Master_Process(void)
                     {
                         Device_ResponseCtrl();
                         u8query_ctrl = 0;
+                        CS = 0;
                         gCtrlInfor.Control_State = 0;
                     }
                 }
